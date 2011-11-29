@@ -1,0 +1,296 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		158A1AF81484A2DB009A5CA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1AF71484A2DB009A5CA4 /* UIKit.framework */; };
+		158A1AFA1484A2DB009A5CA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1AF91484A2DB009A5CA4 /* Foundation.framework */; };
+		158A1AFC1484A2DB009A5CA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1AFB1484A2DB009A5CA4 /* CoreGraphics.framework */; };
+		158A1B021484A2DB009A5CA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 158A1B001484A2DB009A5CA4 /* InfoPlist.strings */; };
+		158A1B041484A2DC009A5CA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B031484A2DB009A5CA4 /* main.m */; };
+		158A1B081484A2DC009A5CA4 /* BLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B071484A2DC009A5CA4 /* BLAppDelegate.m */; };
+		158A1B0B1484A2DC009A5CA4 /* BLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B0A1484A2DC009A5CA4 /* BLViewController.m */; };
+		158A1B0E1484A2DC009A5CA4 /* BLViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158A1B0C1484A2DC009A5CA4 /* BLViewController_iPhone.xib */; };
+		158A1B111484A2DC009A5CA4 /* BLViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158A1B0F1484A2DC009A5CA4 /* BLViewController_iPad.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		158A1AF31484A2DB009A5CA4 /* bijoux-lisp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bijoux-lisp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		158A1AF71484A2DB009A5CA4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		158A1AF91484A2DB009A5CA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		158A1AFB1484A2DB009A5CA4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		158A1AFF1484A2DB009A5CA4 /* bijoux-lisp-Info.plist */ = {isa = PBXFileReference; path = "bijoux-lisp-Info.plist"; sourceTree = "<group>"; };
+		158A1B011484A2DB009A5CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		158A1B031484A2DB009A5CA4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		158A1B051484A2DC009A5CA4 /* bijoux-lisp-Prefix.pch */ = {isa = PBXFileReference; path = "bijoux-lisp-Prefix.pch"; sourceTree = "<group>"; };
+		158A1B061484A2DC009A5CA4 /* BLAppDelegate.h */ = {isa = PBXFileReference; path = BLAppDelegate.h; sourceTree = "<group>"; };
+		158A1B071484A2DC009A5CA4 /* BLAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BLAppDelegate.m; sourceTree = "<group>"; };
+		158A1B091484A2DC009A5CA4 /* BLViewController.h */ = {isa = PBXFileReference; path = BLViewController.h; sourceTree = "<group>"; };
+		158A1B0A1484A2DC009A5CA4 /* BLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BLViewController.m; sourceTree = "<group>"; };
+		158A1B0D1484A2DC009A5CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BLViewController_iPhone.xib; sourceTree = "<group>"; };
+		158A1B101484A2DC009A5CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BLViewController_iPad.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		158A1AF01484A2DB009A5CA4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				158A1AF81484A2DB009A5CA4 /* UIKit.framework in Frameworks */,
+				158A1AFA1484A2DB009A5CA4 /* Foundation.framework in Frameworks */,
+				158A1AFC1484A2DB009A5CA4 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		158A1AE81484A2DB009A5CA4 = {
+			isa = PBXGroup;
+			children = (
+				158A1AFD1484A2DB009A5CA4 /* bijoux-lisp */,
+				158A1AF61484A2DB009A5CA4 /* Frameworks */,
+				158A1AF41484A2DB009A5CA4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		158A1AF41484A2DB009A5CA4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				158A1AF31484A2DB009A5CA4 /* bijoux-lisp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		158A1AF61484A2DB009A5CA4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				158A1AF71484A2DB009A5CA4 /* UIKit.framework */,
+				158A1AF91484A2DB009A5CA4 /* Foundation.framework */,
+				158A1AFB1484A2DB009A5CA4 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		158A1AFD1484A2DB009A5CA4 /* bijoux-lisp */ = {
+			isa = PBXGroup;
+			children = (
+				158A1B061484A2DC009A5CA4 /* BLAppDelegate.h */,
+				158A1B071484A2DC009A5CA4 /* BLAppDelegate.m */,
+				158A1B091484A2DC009A5CA4 /* BLViewController.h */,
+				158A1B0A1484A2DC009A5CA4 /* BLViewController.m */,
+				158A1B0C1484A2DC009A5CA4 /* BLViewController_iPhone.xib */,
+				158A1B0F1484A2DC009A5CA4 /* BLViewController_iPad.xib */,
+				158A1AFE1484A2DB009A5CA4 /* Supporting Files */,
+			);
+			path = "bijoux-lisp";
+			sourceTree = "<group>";
+		};
+		158A1AFE1484A2DB009A5CA4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				158A1AFF1484A2DB009A5CA4 /* bijoux-lisp-Info.plist */,
+				158A1B001484A2DB009A5CA4 /* InfoPlist.strings */,
+				158A1B031484A2DB009A5CA4 /* main.m */,
+				158A1B051484A2DC009A5CA4 /* bijoux-lisp-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		158A1AF21484A2DB009A5CA4 /* bijoux-lisp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 158A1B141484A2DC009A5CA4 /* Build configuration list for PBXNativeTarget "bijoux-lisp" */;
+			buildPhases = (
+				158A1AEF1484A2DB009A5CA4 /* Sources */,
+				158A1AF01484A2DB009A5CA4 /* Frameworks */,
+				158A1AF11484A2DB009A5CA4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "bijoux-lisp";
+			productName = "bijoux-lisp";
+			productReference = 158A1AF31484A2DB009A5CA4 /* bijoux-lisp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		158A1AEA1484A2DB009A5CA4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Soma Creates";
+			};
+			buildConfigurationList = 158A1AED1484A2DB009A5CA4 /* Build configuration list for PBXProject "bijoux-lisp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 158A1AE81484A2DB009A5CA4;
+			productRefGroup = 158A1AF41484A2DB009A5CA4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				158A1AF21484A2DB009A5CA4 /* bijoux-lisp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		158A1AF11484A2DB009A5CA4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				158A1B021484A2DB009A5CA4 /* InfoPlist.strings in Resources */,
+				158A1B0E1484A2DC009A5CA4 /* BLViewController_iPhone.xib in Resources */,
+				158A1B111484A2DC009A5CA4 /* BLViewController_iPad.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		158A1AEF1484A2DB009A5CA4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				158A1B041484A2DC009A5CA4 /* main.m in Sources */,
+				158A1B081484A2DC009A5CA4 /* BLAppDelegate.m in Sources */,
+				158A1B0B1484A2DC009A5CA4 /* BLViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		158A1B001484A2DB009A5CA4 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				158A1B011484A2DB009A5CA4 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		158A1B0C1484A2DC009A5CA4 /* BLViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				158A1B0D1484A2DC009A5CA4 /* en */,
+			);
+			name = BLViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		158A1B0F1484A2DC009A5CA4 /* BLViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				158A1B101484A2DC009A5CA4 /* en */,
+			);
+			name = BLViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		158A1B121484A2DC009A5CA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		158A1B131484A2DC009A5CA4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		158A1B151484A2DC009A5CA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "bijoux-lisp/bijoux-lisp-Prefix.pch";
+				INFOPLIST_FILE = "bijoux-lisp/bijoux-lisp-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		158A1B161484A2DC009A5CA4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "bijoux-lisp/bijoux-lisp-Prefix.pch";
+				INFOPLIST_FILE = "bijoux-lisp/bijoux-lisp-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		158A1AED1484A2DB009A5CA4 /* Build configuration list for PBXProject "bijoux-lisp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				158A1B121484A2DC009A5CA4 /* Debug */,
+				158A1B131484A2DC009A5CA4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		158A1B141484A2DC009A5CA4 /* Build configuration list for PBXNativeTarget "bijoux-lisp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				158A1B151484A2DC009A5CA4 /* Debug */,
+				158A1B161484A2DC009A5CA4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 158A1AEA1484A2DB009A5CA4 /* Project object */;
+}

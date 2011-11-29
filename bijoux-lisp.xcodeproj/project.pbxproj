@@ -18,6 +18,8 @@
 		158A1B111484A2DC009A5CA4 /* BLViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158A1B0F1484A2DC009A5CA4 /* BLViewController_iPad.xib */; };
 		158A1B271484A4B3009A5CA4 /* librmi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1B241484A467009A5CA4 /* librmi.a */; };
 		158A1B2E1484A7C1009A5CA4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1B2D1484A7C1009A5CA4 /* CFNetwork.framework */; };
+		158A1B311484A9DC009A5CA4 /* BLSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B301484A9DC009A5CA4 /* BLSymbol.m */; };
+		158A1B341484AC8E009A5CA4 /* BLEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B331484AC8E009A5CA4 /* BLEngine.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,10 @@
 		158A1B101484A2DC009A5CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BLViewController_iPad.xib; sourceTree = "<group>"; };
 		158A1B181484A467009A5CA4 /* rmi.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = rmi.xcodeproj; path = lib/rmi/rmi.xcodeproj; sourceTree = "<group>"; };
 		158A1B2D1484A7C1009A5CA4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		158A1B2F1484A9DC009A5CA4 /* BLSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLSymbol.h; sourceTree = "<group>"; };
+		158A1B301484A9DC009A5CA4 /* BLSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLSymbol.m; sourceTree = "<group>"; };
+		158A1B321484AC8E009A5CA4 /* BLEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEngine.h; sourceTree = "<group>"; };
+		158A1B331484AC8E009A5CA4 /* BLEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEngine.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +119,10 @@
 			children = (
 				158A1B061484A2DC009A5CA4 /* BLAppDelegate.h */,
 				158A1B071484A2DC009A5CA4 /* BLAppDelegate.m */,
+				158A1B321484AC8E009A5CA4 /* BLEngine.h */,
+				158A1B331484AC8E009A5CA4 /* BLEngine.m */,
+				158A1B2F1484A9DC009A5CA4 /* BLSymbol.h */,
+				158A1B301484A9DC009A5CA4 /* BLSymbol.m */,
 				158A1B091484A2DC009A5CA4 /* BLViewController.h */,
 				158A1B0A1484A2DC009A5CA4 /* BLViewController.m */,
 				158A1B0C1484A2DC009A5CA4 /* BLViewController_iPhone.xib */,
@@ -241,6 +251,8 @@
 				158A1B041484A2DC009A5CA4 /* main.m in Sources */,
 				158A1B081484A2DC009A5CA4 /* BLAppDelegate.m in Sources */,
 				158A1B0B1484A2DC009A5CA4 /* BLViewController.m in Sources */,
+				158A1B311484A9DC009A5CA4 /* BLSymbol.m in Sources */,
+				158A1B341484AC8E009A5CA4 /* BLEngine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,13 +23,13 @@
 		158A1AF71484A2DB009A5CA4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		158A1AF91484A2DB009A5CA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		158A1AFB1484A2DB009A5CA4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		158A1AFF1484A2DB009A5CA4 /* bijoux-lisp-Info.plist */ = {isa = PBXFileReference; path = "bijoux-lisp-Info.plist"; sourceTree = "<group>"; };
+		158A1AFF1484A2DB009A5CA4 /* bijoux-lisp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "bijoux-lisp-Info.plist"; sourceTree = "<group>"; };
 		158A1B011484A2DB009A5CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		158A1B031484A2DB009A5CA4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		158A1B051484A2DC009A5CA4 /* bijoux-lisp-Prefix.pch */ = {isa = PBXFileReference; path = "bijoux-lisp-Prefix.pch"; sourceTree = "<group>"; };
-		158A1B061484A2DC009A5CA4 /* BLAppDelegate.h */ = {isa = PBXFileReference; path = BLAppDelegate.h; sourceTree = "<group>"; };
+		158A1B051484A2DC009A5CA4 /* bijoux-lisp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "bijoux-lisp-Prefix.pch"; sourceTree = "<group>"; };
+		158A1B061484A2DC009A5CA4 /* BLAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BLAppDelegate.h; sourceTree = "<group>"; };
 		158A1B071484A2DC009A5CA4 /* BLAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BLAppDelegate.m; sourceTree = "<group>"; };
-		158A1B091484A2DC009A5CA4 /* BLViewController.h */ = {isa = PBXFileReference; path = BLViewController.h; sourceTree = "<group>"; };
+		158A1B091484A2DC009A5CA4 /* BLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BLViewController.h; sourceTree = "<group>"; };
 		158A1B0A1484A2DC009A5CA4 /* BLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BLViewController.m; sourceTree = "<group>"; };
 		158A1B0D1484A2DC009A5CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BLViewController_iPhone.xib; sourceTree = "<group>"; };
 		158A1B101484A2DC009A5CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BLViewController_iPad.xib; sourceTree = "<group>"; };

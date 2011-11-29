@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class BLViewController;
+@class BLViewController, RemoteMessageInterface;
 
 @interface BLAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) BLViewController *viewController;
+
+@property (strong, nonatomic) RemoteMessageInterface *rmi;
 
 @end

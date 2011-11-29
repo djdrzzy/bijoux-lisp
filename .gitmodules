@@ -1,0 +1,3 @@
+[submodule "lib/rmi"]
+	path = lib/rmi
+	url = git@github.com:djdrzzy/rmi.git

@@ -16,7 +16,33 @@
 		158A1B0B1484A2DC009A5CA4 /* BLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B0A1484A2DC009A5CA4 /* BLViewController.m */; };
 		158A1B0E1484A2DC009A5CA4 /* BLViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158A1B0C1484A2DC009A5CA4 /* BLViewController_iPhone.xib */; };
 		158A1B111484A2DC009A5CA4 /* BLViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158A1B0F1484A2DC009A5CA4 /* BLViewController_iPad.xib */; };
+		158A1B271484A4B3009A5CA4 /* librmi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1B241484A467009A5CA4 /* librmi.a */; };
+		158A1B2E1484A7C1009A5CA4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1B2D1484A7C1009A5CA4 /* CFNetwork.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		158A1B211484A467009A5CA4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 158A1B181484A467009A5CA4 /* rmi.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1D6058910D05DD3D006BFB54;
+			remoteInfo = "rmi-test";
+		};
+		158A1B231484A467009A5CA4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 158A1B181484A467009A5CA4 /* rmi.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 15B964E213898CC00026141E;
+			remoteInfo = rmi;
+		};
+		158A1B251484A4AB009A5CA4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 158A1B181484A467009A5CA4 /* rmi.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 15B964E113898CC00026141E;
+			remoteInfo = rmi;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		158A1AF31484A2DB009A5CA4 /* bijoux-lisp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bijoux-lisp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -33,6 +59,8 @@
 		158A1B0A1484A2DC009A5CA4 /* BLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BLViewController.m; sourceTree = "<group>"; };
 		158A1B0D1484A2DC009A5CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BLViewController_iPhone.xib; sourceTree = "<group>"; };
 		158A1B101484A2DC009A5CA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/BLViewController_iPad.xib; sourceTree = "<group>"; };
+		158A1B181484A467009A5CA4 /* rmi.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = rmi.xcodeproj; path = lib/rmi/rmi.xcodeproj; sourceTree = "<group>"; };
+		158A1B2D1484A7C1009A5CA4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +68,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				158A1B2E1484A7C1009A5CA4 /* CFNetwork.framework in Frameworks */,
+				158A1B271484A4B3009A5CA4 /* librmi.a in Frameworks */,
 				158A1AF81484A2DB009A5CA4 /* UIKit.framework in Frameworks */,
 				158A1AFA1484A2DB009A5CA4 /* Foundation.framework in Frameworks */,
 				158A1AFC1484A2DB009A5CA4 /* CoreGraphics.framework in Frameworks */,
@@ -53,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				158A1AFD1484A2DB009A5CA4 /* bijoux-lisp */,
+				158A1B171484A444009A5CA4 /* lib */,
 				158A1AF61484A2DB009A5CA4 /* Frameworks */,
 				158A1AF41484A2DB009A5CA4 /* Products */,
 			);
@@ -69,6 +100,7 @@
 		158A1AF61484A2DB009A5CA4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				158A1B2D1484A7C1009A5CA4 /* CFNetwork.framework */,
 				158A1AF71484A2DB009A5CA4 /* UIKit.framework */,
 				158A1AF91484A2DB009A5CA4 /* Foundation.framework */,
 				158A1AFB1484A2DB009A5CA4 /* CoreGraphics.framework */,
@@ -101,6 +133,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		158A1B171484A444009A5CA4 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				158A1B181484A467009A5CA4 /* rmi.xcodeproj */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		158A1B191484A467009A5CA4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				158A1B221484A467009A5CA4 /* rmi.app */,
+				158A1B241484A467009A5CA4 /* librmi.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -115,6 +164,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				158A1B261484A4AB009A5CA4 /* PBXTargetDependency */,
 			);
 			name = "bijoux-lisp";
 			productName = "bijoux-lisp";
@@ -140,12 +190,35 @@
 			mainGroup = 158A1AE81484A2DB009A5CA4;
 			productRefGroup = 158A1AF41484A2DB009A5CA4 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 158A1B191484A467009A5CA4 /* Products */;
+					ProjectRef = 158A1B181484A467009A5CA4 /* rmi.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				158A1AF21484A2DB009A5CA4 /* bijoux-lisp */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		158A1B221484A467009A5CA4 /* rmi.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = rmi.app;
+			remoteRef = 158A1B211484A467009A5CA4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		158A1B241484A467009A5CA4 /* librmi.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = librmi.a;
+			remoteRef = 158A1B231484A467009A5CA4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		158A1AF11484A2DB009A5CA4 /* Resources */ = {
@@ -172,6 +245,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		158A1B261484A4AB009A5CA4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = rmi;
+			targetProxy = 158A1B251484A4AB009A5CA4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		158A1B001484A2DB009A5CA4 /* InfoPlist.strings */ = {
@@ -204,7 +285,7 @@
 		158A1B121484A2DC009A5CA4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -224,13 +305,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "./lib/**";
 			};
 			name = Debug;
 		};
 		158A1B131484A2DC009A5CA4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -244,6 +326,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "./lib/**";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

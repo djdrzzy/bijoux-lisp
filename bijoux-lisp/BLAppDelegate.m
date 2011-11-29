@@ -9,11 +9,16 @@
 #import "BLAppDelegate.h"
 
 #import "BLViewController.h"
+#import "RemoteMessageInterface.h"
+
+@interface BLAppDelegate () <RemoteMessageInterfaceDelegate>
+@end
 
 @implementation BLAppDelegate
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
+@synthesize rmi;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -26,7 +31,17 @@
     }
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+    
+    self.rmi = [[RemoteMessageInterface alloc] initWithWelcomeMessage:@"Welcome to bijoux-lisp repl!" andPrompt:@"\n>"];
+    self.rmi.delegate = self;
+    [self.rmi startOnSocket:40000];
+    
     return YES;
+}
+
+-(NSString*) remoteMessageInterface:(RemoteMessageInterface*)interface
+                    receivedMessage:(NSString*)message {
+    return [NSString stringWithFormat:@"You said: \"%@\"", message];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

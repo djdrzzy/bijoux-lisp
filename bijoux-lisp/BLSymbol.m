@@ -3,7 +3,7 @@
 //  bijoux-lisp
 //
 //  Created by Daniel Drzimotta on 11-11-28.
-//  Copyright (c) 2011 Soma Creates. All rights reserved.
+//  Copyright (c) 2011 Daniel Drzimotta. All rights reserved.
 //
 
 #import "BLSymbol.h"

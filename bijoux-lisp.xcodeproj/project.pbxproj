@@ -390,6 +390,7 @@
 				158A1B161484A2DC009A5CA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

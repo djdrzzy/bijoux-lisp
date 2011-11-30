@@ -49,14 +49,10 @@
     id head = tokens.head;
     id tail = tokens.tail;
     
-//    if (!tail) {
-//	return nil;
-//    }
-    
     if ([head isEqualToString:@")"]) {
 	return nil;
     } else if ([head isEqualToString:@"("]) {
-	return [self parseToClose:tail];
+	return [[BLCons alloc] initWithCar:[self parseToClose:head] cdr:[self parseToClose:tail]];
     } else if (head && tail){
 	return [[BLCons alloc] initWithCar:head cdr:[self parseToClose:tail]];
     } else {

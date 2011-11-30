@@ -26,7 +26,7 @@
 }
 
 -(NSString*) description {
-    return [NSString stringWithFormat:@"(car: %@ cdr: %@)", self.car, self.cdr];
+    return [NSString stringWithFormat:@"(%@ %@)", self.car, self.cdr];
 }
 
 @end

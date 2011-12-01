@@ -47,16 +47,14 @@
 
 -(id) parseToClose:(NSArray*)tokens {
     id head = tokens.head;
-    id tail = tokens.tail;
+    NSArray *tail = tokens.tail;
     
-    if ([head isEqualToString:@")"]) {
+    if (!head || [head isEqualToString:@")"]) {
 	return nil;
     } else if ([head isEqualToString:@"("]) {
-	return [[BLCons alloc] initWithCar:[self parseToClose:head] cdr:[self parseToClose:tail]];
-    } else if (head && tail){
-	return [[BLCons alloc] initWithCar:head cdr:[self parseToClose:tail]];
+	return [[BLCons alloc] initWithCar:[self parseToClose:tail] cdr:[self parseToClose:tail.tail]];
     } else {
-	return [[BLCons alloc] initWithCar:head cdr:nil];
+	return [[BLCons alloc] initWithCar:head cdr:[self parseToClose:tail]];
     }
 }
 
@@ -66,7 +64,7 @@
     // We eat from the passed in tokens...
     id head = tokens.head;
     id tail = tokens.tail;
-
+    
     return  [[BLCons alloc] initWithCar:head cdr:[self parseToClose:tail]];
     
 }

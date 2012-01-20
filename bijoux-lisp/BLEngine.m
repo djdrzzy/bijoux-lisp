@@ -33,15 +33,24 @@
 
 -(id) read:(id)sexp {
     // So we break up by whitespace and ( and )
+        
+    // First we see if any of those tokens include a '(' or a ')'. If it does
+    // then we break up after the '(' or before the ')'
+    sexp = [sexp stringByReplacingOccurrencesOfString:@"(" 
+					   withString:@"( "];
     
+    sexp = [sexp stringByReplacingOccurrencesOfString:@")" 
+					   withString:@" ) "];
+    
+    
+    // then we seperate by whitespace
     NSMutableCharacterSet *characters = [[NSMutableCharacterSet alloc] init];
-    [characters addCharactersInString:@"()"];
     [characters formUnionWithCharacterSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
     id brokenUp = [NSMutableArray arrayWithArray:[sexp componentsSeparatedByCharactersInSet:characters]];
     [brokenUp removeObject:@""];
+    
+    NSLog(@"brokenUp: %@", brokenUp);
 
-    // Return the array
     return brokenUp;
 }
 
@@ -64,6 +73,9 @@
     // We eat from the passed in tokens...
     id head = tokens.head;
     id tail = tokens.tail;
+    
+    NSLog(@"head: %@", head);
+    NSLog(@"tail: %@", tail);
     
     return  [[BLCons alloc] initWithCar:head cdr:[self parseToClose:tail]];
     

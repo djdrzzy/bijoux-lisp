@@ -82,9 +82,6 @@
 }
 
 -(id) read:(NSMutableArray*)tokens {
-    // Here we build up our cons cells...
-    
-    // We eat from the passed in tokens...
     id token = [tokens nextToken];
         
     if ([token isEqualToString:@"("]) {
@@ -94,12 +91,53 @@
     return token;
 }
 
--(id) eval:(id)sexp {
-    
-    id tokens = [self tokenize:sexp];
-    
-    BLCons *formToEval = [self read:tokens];
-    
-    return [formToEval description];
+-(id) car:(BLCons*)cons {
+    return cons.car;
 }
+
+-(id) cdr:(BLCons*)cons {
+    return cons.cdr;
+}
+
+-(id) add:(BLCons*)cons {
+    double firstVal = [cons.car doubleValue];
+    double secondVal = (cons.cdr ? [[self add:cons.cdr] doubleValue] : 0.0);
+    double finalVal = firstVal + secondVal;
+    return [NSString stringWithFormat:@"%f", finalVal];
+}
+
+-(id) evalFunc:(BLCons*)cons {
+    
+//    NSDictionary *funcLookup = [NSDictionary dictionaryWithObjects:nil 
+//							   forKeys:nil];
+    if ([cons.car isEqualToString:@"+"]) {
+	return [self add:cons.cdr];
+    } else {
+	return [cons description];
+    }
+}
+
+-(id) evalCons:(BLCons*)cons {
+    return [self evalFunc:cons];
+}
+
+-(id) eval:(id)sexp {
+    return ([sexp isKindOfClass:BLCons.class]
+	    ? [self evalCons:sexp]
+	    : [sexp description]);
+
+}
+
+-(id) parseAndEval:(id)input {
+    if (!input) {
+	return @"";
+    }
+    
+    id tokens = [self tokenize:input];
+    
+    id formToEval = [self read:tokens];
+    NSLog(@"formToEval: %@", formToEval);
+    return [self eval:formToEval];
+}
+
 @end

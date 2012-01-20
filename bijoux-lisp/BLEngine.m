@@ -10,12 +10,14 @@
 
 #import "BLCons.h"
 
-@interface NSArray (BLAdditions)
+// Handy: http://nakkaya.com/2010/08/24/a-micro-manual-for-lisp-implemented-in-c/
+
+@interface NSMutableArray (BLAdditions)
 -(id) head;
--(NSArray*) tail;
+-(NSMutableArray*) tail;
 @end
 
-@implementation NSArray (BLAdditions)
+@implementation NSMutableArray (BLAdditions)
 -(id) head {
     return [self objectAtIndex:0];
 }
@@ -27,11 +29,18 @@
 	return [self subarrayWithRange:NSMakeRange(1, self.count - 1)];
     }
 }
+
+-(id) nextToken {
+    id firstElement = [self objectAtIndex:0];
+    [self removeObjectAtIndex:0];
+    return firstElement;
+}
+
 @end
 
 @implementation BLEngine
 
--(id) read:(id)sexp {
+-(id) tokenize:(id)sexp {
     // So we break up by whitespace and ( and )
         
     // First we see if any of those tokens include a '(' or a ')'. If it does
@@ -49,45 +58,48 @@
     id brokenUp = [NSMutableArray arrayWithArray:[sexp componentsSeparatedByCharactersInSet:characters]];
     [brokenUp removeObject:@""];
     
-    NSLog(@"brokenUp: %@", brokenUp);
-
     return brokenUp;
 }
 
--(id) parseToClose:(NSArray*)tokens {
-    id head = tokens.head;
-    NSArray *tail = tokens.tail;
+-(id) readTail:(NSMutableArray*)tokens {
+    id token = [tokens nextToken];
     
-    if (!head || [head isEqualToString:@")"]) {
+    if ([token isEqualToString:@")"]) {
 	return nil;
-    } else if ([head isEqualToString:@"("]) {
-	return [[BLCons alloc] initWithCar:[self parseToClose:tail] cdr:[self parseToClose:tail.tail]];
+    } else if ([token isEqualToString:@"("]) {
+	id first = [self readTail:tokens];
+	id second = [self readTail:tokens];
+	return [[BLCons alloc] initWithCar:first 
+				       cdr:second];
     } else {
-	return [[BLCons alloc] initWithCar:head cdr:[self parseToClose:tail]];
+	id first = token;
+	id second = [self readTail:tokens];
+	return [[BLCons alloc] initWithCar:first 
+				       cdr:second];
     }
 }
 
--(id) parse:(NSArray*)tokens {
+-(id) read:(NSMutableArray*)tokens {
     // Here we build up our cons cells...
     
     // We eat from the passed in tokens...
-    id head = tokens.head;
-    id tail = tokens.tail;
+    id token = [tokens nextToken];
+        
+    if ([token isEqualToString:@"("]) {
+	return [self readTail:tokens];
+    }
     
-    NSLog(@"head: %@", head);
-    NSLog(@"tail: %@", tail);
-    
-    return  [[BLCons alloc] initWithCar:head cdr:[self parseToClose:tail]];
-    
+    return token;
 }
 
-// TODO: Pretend this is implicitly wrapped in a progn?
+// TODO: Pretend this is implicitly wrapped in a progn? Probably not... sexp
+// might not be a sexp could just be '4' or something so a bad name...
 -(id) eval:(id)sexp {
     
-    id tokens = [self read:sexp];
+    id tokens = [self tokenize:sexp];
     
     
-    NSLog(@"Cons %@", [self parse:tokens]);
+    NSLog(@"Cons %@", [self read:tokens]);
     
     
     id lastEval = nil;
@@ -97,13 +109,7 @@
         double potentialDouble = 0.0;
         BOOL wasNum = [doubleScanner scanDouble:&potentialDouble];
         lastEval = wasNum ? [NSNumber numberWithDouble:potentialDouble] : lastEval;
-	
-	
     }
-    
-    // Here we make our cons that we evaluate. We just eval our numbers right now... And only as NSNumbers.
-    // Be nice if they were bignums.
-    
     
     return [NSString stringWithFormat:@"Last eval: \"%@\"", lastEval];
 }

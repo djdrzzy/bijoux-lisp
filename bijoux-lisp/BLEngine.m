@@ -10,8 +10,6 @@
 
 #import "BLCons.h"
 
-// Handy: http://nakkaya.com/2010/08/24/a-micro-manual-for-lisp-implemented-in-c/
-
 @interface NSMutableArray (BLAdditions)
 -(id) head;
 -(NSMutableArray*) tail;
@@ -23,11 +21,9 @@
 }
 
 -(NSArray*) tail {
-    if (self.count == 1) {
-	return nil;
-    } else {
-	return [self subarrayWithRange:NSMakeRange(1, self.count - 1)];
-    }
+    return (self.count == 1 
+	    ? nil 
+	    : [self subarrayWithRange:NSMakeRange(1, self.count - 1)]);
 }
 
 -(id) nextToken {
@@ -54,9 +50,15 @@
     
     // then we seperate by whitespace
     NSMutableCharacterSet *characters = [[NSMutableCharacterSet alloc] init];
-    [characters formUnionWithCharacterSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    id brokenUp = [NSMutableArray arrayWithArray:[sexp componentsSeparatedByCharactersInSet:characters]];
+    
+    [characters formUnionWithCharacterSet:
+     [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    id brokenUp = [NSMutableArray arrayWithArray:
+		    [sexp componentsSeparatedByCharactersInSet:characters]];
+    
     [brokenUp removeObject:@""];
+    
     
     return brokenUp;
 }
@@ -92,25 +94,12 @@
     return token;
 }
 
-// TODO: Pretend this is implicitly wrapped in a progn? Probably not... sexp
-// might not be a sexp could just be '4' or something so a bad name...
 -(id) eval:(id)sexp {
     
     id tokens = [self tokenize:sexp];
     
+    BLCons *formToEval = [self read:tokens];
     
-    NSLog(@"Cons %@", [self read:tokens]);
-    
-    
-    id lastEval = nil;
-    for (id token in tokens) {
-        // So test if a number which eval to themselves. All scanned in as doubles...
-        NSScanner *doubleScanner = [NSScanner scannerWithString:token];
-        double potentialDouble = 0.0;
-        BOOL wasNum = [doubleScanner scanDouble:&potentialDouble];
-        lastEval = wasNum ? [NSNumber numberWithDouble:potentialDouble] : lastEval;
-    }
-    
-    return [NSString stringWithFormat:@"Last eval: \"%@\"", lastEval];
+    return [formToEval description];
 }
 @end

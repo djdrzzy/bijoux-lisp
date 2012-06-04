@@ -21,6 +21,7 @@
 		158A1B311484A9DC009A5CA4 /* BLSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B301484A9DC009A5CA4 /* BLSymbol.m */; };
 		158A1B341484AC8E009A5CA4 /* BLEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B331484AC8E009A5CA4 /* BLEngine.m */; };
 		158A1B371484AEC7009A5CA4 /* BLCons.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B361484AEC7009A5CA4 /* BLCons.m */; };
+		15D782E8157D6D1500E204BC /* BLLambda.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D782E7157D6D1500E204BC /* BLLambda.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,8 @@
 		158A1B331484AC8E009A5CA4 /* BLEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEngine.m; sourceTree = "<group>"; };
 		158A1B351484AEC7009A5CA4 /* BLCons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLCons.h; sourceTree = "<group>"; };
 		158A1B361484AEC7009A5CA4 /* BLCons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCons.m; sourceTree = "<group>"; };
+		15D782E6157D6D1500E204BC /* BLLambda.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLLambda.h; sourceTree = "<group>"; };
+		15D782E7157D6D1500E204BC /* BLLambda.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLLambda.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +129,8 @@
 				158A1B361484AEC7009A5CA4 /* BLCons.m */,
 				158A1B321484AC8E009A5CA4 /* BLEngine.h */,
 				158A1B331484AC8E009A5CA4 /* BLEngine.m */,
+				15D782E6157D6D1500E204BC /* BLLambda.h */,
+				15D782E7157D6D1500E204BC /* BLLambda.m */,
 				158A1B2F1484A9DC009A5CA4 /* BLSymbol.h */,
 				158A1B301484A9DC009A5CA4 /* BLSymbol.m */,
 				158A1B091484A2DC009A5CA4 /* BLViewController.h */,
@@ -259,6 +264,7 @@
 				158A1B311484A9DC009A5CA4 /* BLSymbol.m in Sources */,
 				158A1B341484AC8E009A5CA4 /* BLEngine.m in Sources */,
 				158A1B371484AEC7009A5CA4 /* BLCons.m in Sources */,
+				15D782E8157D6D1500E204BC /* BLLambda.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

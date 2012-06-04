@@ -10,6 +10,16 @@
 
 #import "BLCons.h"
 
+@interface NSObject (BLAdditions)
+-(BOOL) atom;
+@end
+
+@implementation NSObject (BLAdditions)
+-(BOOL) atom {
+    return YES;
+}
+@end
+
 @interface NSMutableArray (BLAdditions)
 -(id) head;
 -(NSMutableArray*) tail;
@@ -59,6 +69,7 @@
     
     [brokenUp removeObject:@""];
     
+    NSLog(@"brokenUp: %@", brokenUp);
     
     return brokenUp;
 }
@@ -100,7 +111,11 @@
 }
 
 -(id) add:(BLCons*)cons {
-    double firstVal = [cons.car doubleValue];
+    NSLog(@"is atom: %i", [cons.car atom]);
+    
+    double firstVal = [cons.car atom] ? [cons.car doubleValue] : [[self evalCons:cons.car] doubleValue];
+    
+    
     double secondVal = (cons.cdr ? [[self add:cons.cdr] doubleValue] : 0.0);
     double finalVal = firstVal + secondVal;
     return [NSString stringWithFormat:@"%f", finalVal];
@@ -108,11 +123,10 @@
 
 -(id) evalFunc:(BLCons*)cons {
     
-//    NSDictionary *funcLookup = [NSDictionary dictionaryWithObjects:nil 
-//							   forKeys:nil];
     if ([cons.car isEqualToString:@"+"]) {
 	return [self add:cons.cdr];
     } else {
+	// Crash eventually. Not a valid form
 	return [cons description];
     }
 }
@@ -136,7 +150,11 @@
     id tokens = [self tokenize:input];
     
     id formToEval = [self read:tokens];
+    
     NSLog(@"formToEval: %@", formToEval);
+    
+    
+    
     return [self eval:formToEval];
 }
 

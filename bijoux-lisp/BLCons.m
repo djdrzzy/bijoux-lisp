@@ -25,8 +25,15 @@
     return [self initWithCar:nil cdr:nil];
 }
 
+-(BOOL) atom {
+    return NO;
+}
+
 -(NSString*) description {
-    return [NSString stringWithFormat:@"(%@ %@)", self.car, self.cdr];
+    NSString *aCar = self.car;
+    NSString *aCdr = self.cdr ?: @"nil";
+    
+    return [NSString stringWithFormat:@"(%@ %@)", aCar, aCdr];
 }
 
 @end

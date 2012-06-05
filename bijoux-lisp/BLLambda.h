@@ -31,3 +31,9 @@
 
 @interface BLLambdaCdr : BLLambda
 @end
+
+@interface BLLambdaEqual : BLLambda
+@end
+
+@interface BLLambdaCons : BLLambda 
+@end

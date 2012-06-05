@@ -23,6 +23,8 @@ static NSMutableDictionary *_symbolLookup;
     [_symbolLookup setValue:[[BLLambdaQuote alloc] init] forKey:@"quote"];
     [_symbolLookup setValue:[[BLLambdaCar alloc] init] forKey:@"car"];
     [_symbolLookup setValue:[[BLLambdaCdr alloc] init] forKey:@"cdr"];
+    [_symbolLookup setValue:[[BLLambdaEqual alloc] init] forKey:@"eq?"];
+    [_symbolLookup setValue:[[BLLambdaCons alloc] init] forKey:@"cons"];
 }
 
 - (id)init {
@@ -78,6 +80,32 @@ static NSMutableDictionary *_symbolLookup;
 -(id) eval:(BLCons*)cons {
     return [[cons car] cdr];
 }
+@end
+
+@implementation BLLambdaEqual
+-(id) eval:(BLCons*)cons {
+    if (!cons) {
+	return [NSNumber numberWithBool:YES];
+    }
+    
+    id firstVal = cons.car;
+    id secondVal = [[[BLLambdaEqual alloc] init] eval:cons.cdr];
+    
+    return [firstVal isEqual:secondVal] ? firstVal : nil;
+}
+@end
+
+@implementation BLLambdaCons
+
+-(id) eval:(BLCons*)cons {
+    id first = cons.car;
+    id second = [cons.cdr car];
+    
+    return [[BLCons alloc] initWithCar:first
+				   cdr:second];
+    
+}
+
 @end
 
 @implementation BLLambdaEval

@@ -47,9 +47,7 @@
 		    [sexp componentsSeparatedByCharactersInSet:characters]];
     
     [brokenUp removeObject:@""];
-    
-    NSLog(@"brokenUp: %@", brokenUp);
-    
+        
     return brokenUp;
 }
 
@@ -92,14 +90,8 @@
     
     // Creates our internal SEXP representation
     BLCons *formToEval = [self read:tokens];
-    
-    NSLog(@"form to eval: %@", formToEval);
-    
+        
     id result = [[[BLLambdaEval alloc] init] eval:formToEval];
-    
-    NSLog(@"[result isKindOfClass:BLCons.class]: %@", [result class]);
-    
-    
     
     return result;
 }

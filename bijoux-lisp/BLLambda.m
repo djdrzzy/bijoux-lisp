@@ -129,6 +129,10 @@ static NSMutableDictionary *_symbolLookup;
     return self;
 }
 
+
+// We need to replace the parameter values with their parameters here...
+// Then we can try this out...
+// > ((lambda (x) (+ x x x)) 5) => 15
 -(id) eval:(id)sexp {
     
     

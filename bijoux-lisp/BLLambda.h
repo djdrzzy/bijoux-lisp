@@ -20,5 +20,14 @@
 @interface BLLambdaEval : BLLambda
 @end
 
-@interface BLLambdaAtom :BLLambda
+@interface BLLambdaAtom : BLLambda
+@end
+
+@interface BLLambdaQuote : BLLambda
+@end
+
+@interface BLLambdaCar : BLLambda
+@end
+
+@interface BLLambdaCdr : BLLambda
 @end

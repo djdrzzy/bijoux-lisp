@@ -11,7 +11,6 @@
 #import "BLCons.h"
 #import "BLLambda.h"
 
-
 @interface NSMutableArray (BLAdditions)
 -(id) nextToken;
 @end
@@ -62,11 +61,13 @@
     } else if ([token isEqualToString:@"("]) {
 	id first = [self readTail:tokens];
 	id second = [self readTail:tokens];
+	
 	return [[BLCons alloc] initWithCar:first 
 				       cdr:second];
     } else {
 	id first = token;
 	id second = [self readTail:tokens];
+	
 	return [[BLCons alloc] initWithCar:first 
 				       cdr:second];
     }
@@ -92,7 +93,15 @@
     // Creates our internal SEXP representation
     BLCons *formToEval = [self read:tokens];
     
-    return [[[BLLambdaEval alloc] init] eval:formToEval];
+    NSLog(@"form to eval: %@", formToEval);
+    
+    id result = [[[BLLambdaEval alloc] init] eval:formToEval];
+    
+    NSLog(@"[result isKindOfClass:BLCons.class]: %@", [result class]);
+    
+    
+    
+    return result;
 }
 
 @end

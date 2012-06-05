@@ -47,7 +47,7 @@
 
 -(NSString*) remoteMessageInterface:(RemoteMessageInterface*)interface
                     receivedMessage:(NSString*)message {
-    return [self.blengine parseAndEval:message];
+    return [[self.blengine parseAndEval:message] description];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

@@ -29,11 +29,20 @@
     return NO;
 }
 
--(NSString*) description {
-    NSString *aCar = self.car;
-    NSString *aCdr = self.cdr ?: @"nil";
+-(NSString*) descriptionWithOpeningParenthesis:(BOOL)openingPar {
+    NSString *openingParString = openingPar ? @"(%@" : @"%@";
     
-    return [NSString stringWithFormat:@"(%@ %@)", aCar, aCdr];
+    openingParString = self.cdr ? [openingParString stringByAppendingString:@" "] : [openingParString stringByAppendingString:@""];
+    
+    NSString *aCar = [NSString stringWithFormat:openingParString, self.car] ;
+    
+    NSString *aCdr = self.cdr ? [self.cdr descriptionWithOpeningParenthesis:NO] : @")";
+    
+    return [NSString stringWithFormat:@"%@%@", aCar, aCdr];
+}
+
+-(NSString*) description {
+    return [self descriptionWithOpeningParenthesis:YES];
 }
 
 @end

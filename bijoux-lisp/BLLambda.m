@@ -49,21 +49,14 @@ static NSMutableDictionary *_symbolLookup;
 // all of the cons.cars are already going to be NSDecimalNumbers...
 // All of the sub args will have already been evalled...
 -(id) eval:(BLCons*)cons {
-    NSAssert([cons isKindOfClass:BLCons.class], @"Can't add a non-BLCons");
+    if (!cons) {
+	return [NSDecimalNumber numberWithDouble:0.0];
+    }
         
     NSDecimalNumber *firstVal = cons.car;
     NSDecimalNumber *secondVal = [[[BLLambdaAdd alloc] init] eval:cons.cdr];
     
     return [firstVal decimalNumberByAdding:secondVal];
-    
-    
-//    double firstVal = ([[[BLLambdaAtom alloc] init] eval:cons.car] 
-//		       ? [cons.car doubleValue] 
-//		       : [[[[BLLambdaEval alloc] init] eval:cons.car] doubleValue]);
-//    
-//    double secondVal = (cons.cdr ? [[[[BLLambdaAdd alloc] init] eval:cons.cdr] doubleValue] : 0.0);
-//    double finalVal = firstVal + secondVal;
-//    return [NSNumber numberWithDouble:finalVal];
 }
 @end
 
@@ -98,7 +91,7 @@ static NSMutableDictionary *_symbolLookup;
     }
     
     return ([sexp isKindOfClass:BLCons.class]
-	    ? [self evalFunc:sexp]
+	    ? [self evalCons:sexp]
 	    : [self evalAtom:sexp]);
     
 }
@@ -107,6 +100,14 @@ static NSMutableDictionary *_symbolLookup;
     NSAssert([atom isKindOfClass:NSString.class], @"Atom must be an NSString for now.");
     
     return [NSDecimalNumber decimalNumberWithString:atom];
+}
+
+-(id) evalCons:(BLCons*)cons {
+    if ([_symbolLookup valueForKey:cons.car]) {
+	return [self evalFunc:cons];
+    } else {
+	return [self evalArgs:cons];
+    }
 }
 
 -(id) evalArgs:(BLCons*)cons {

@@ -25,6 +25,7 @@ static NSMutableDictionary *_symbolLookup;
     [_symbolLookup setValue:[[BLLambdaCdr alloc] init] forKey:@"cdr"];
     [_symbolLookup setValue:[[BLLambdaEqual alloc] init] forKey:@"eq?"];
     [_symbolLookup setValue:[[BLLambdaCons alloc] init] forKey:@"cons"];
+    [_symbolLookup setValue:[[BLLambdaLambda alloc] init] forKey:@"lambda"];
 }
 
 - (id)init {
@@ -108,6 +109,41 @@ static NSMutableDictionary *_symbolLookup;
 
 @end
 
+@interface BLLambdaLambdaLambda : BLLambdaLambda 
+-(id) initWithArgs:(BLCons*)args body:(BLCons*)body;
+@end
+
+@implementation BLLambdaLambdaLambda {
+    BLCons *_args;
+    BLCons *_body;
+}
+
+-(id) initWithArgs:(BLCons*)args body:(BLCons*)body {
+    self = [super init];
+    
+    if (self) {
+	_args = args;
+	_body = body;
+    }
+    
+    return self;
+}
+
+-(id) eval:(id)sexp {
+    
+    
+    
+    
+    return nil;
+}
+@end
+
+@implementation BLLambdaLambda 
+-(id) eval:(id)sexp {
+    return [[BLLambdaLambdaLambda alloc] initWithArgs:[sexp car] body:[sexp cdr]];
+}
+@end
+
 @implementation BLLambdaEval
 
 -(id) eval:(id)sexp {
@@ -122,9 +158,10 @@ static NSMutableDictionary *_symbolLookup;
 }
 
 -(id) evalAtom:(id)atom {
-    NSAssert([atom isKindOfClass:NSString.class], @"Atom must be an NSString for now.");
+    NSAssert([atom isKindOfClass:NSString.class]
+	     || [atom isKindOfClass:BLLambdaLambdaLambda.class], @"Atom must be an NSString or lambda for now.");
     
-    return [NSDecimalNumber decimalNumberWithString:atom];
+    return [atom isKindOfClass:NSString.class] ? [NSDecimalNumber decimalNumberWithString:atom] : atom;
 }
 
 -(id) evalArgs:(BLCons*)cons {
@@ -145,7 +182,7 @@ static NSMutableDictionary *_symbolLookup;
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     
-    NSSet *setToNotEvalArgs = [NSSet setWithObjects:@"quote", nil];
+    NSSet *setToNotEvalArgs = [NSSet setWithObjects:@"quote", @"lambda", nil];
     
     id resultToEval = [setToNotEvalArgs containsObject:cons.car] ? cons.cdr : [self evalArgs:cons.cdr];
         

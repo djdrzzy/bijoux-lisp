@@ -37,3 +37,6 @@
 
 @interface BLLambdaCons : BLLambda 
 @end
+
+@interface BLLambdaLambda : BLLambda
+@end

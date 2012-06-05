@@ -58,7 +58,7 @@ static NSMutableDictionary *_symbolLookup;
 
 @implementation BLLambdaAtom
 -(id) eval:(BLCons*)cons {
-    return [cons isKindOfClass:BLCons.class] ? nil : cons;
+    return [cons.car isKindOfClass:BLCons.class] ? nil : cons.car;
 }
 @end
 

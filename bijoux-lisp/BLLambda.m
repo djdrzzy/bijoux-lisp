@@ -19,7 +19,7 @@ static NSMutableDictionary *_symbolLookup;
     
     [_symbolLookup setValue:[[BLLambdaAdd alloc] init] forKey:@"+"];
     [_symbolLookup setValue:[[BLLambdaEval alloc] init] forKey:@"eval"];
-    [_symbolLookup setValue:[[BLLambdaAtom alloc] init] forKey:@"atom"];
+    [_symbolLookup setValue:[[BLLambdaAtom alloc] init] forKey:@"atom?"];
     [_symbolLookup setValue:[[BLLambdaQuote alloc] init] forKey:@"quote"];
     [_symbolLookup setValue:[[BLLambdaCar alloc] init] forKey:@"car"];
     [_symbolLookup setValue:[[BLLambdaCdr alloc] init] forKey:@"cdr"];
@@ -81,6 +81,7 @@ static NSMutableDictionary *_symbolLookup;
 @end
 
 @implementation BLLambdaEval
+
 -(id) eval:(id)sexp {
     if (!sexp) {
 	return nil;
@@ -120,7 +121,10 @@ static NSMutableDictionary *_symbolLookup;
     
     id resultToEval = [setToNotEvalArgs containsObject:cons.car] ? cons.cdr : [self evalArgs:cons.cdr];
         
+    if ([fetchedLambda isKindOfClass:BLLambdaEval.class]) {
+	return [self eval:[resultToEval car]];
+    }
+    
     return [fetchedLambda eval:resultToEval];
-
 }
 @end

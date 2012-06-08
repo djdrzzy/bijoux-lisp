@@ -138,7 +138,7 @@ static NSMutableDictionary *_symbolLookup;
     
     
     
-    return nil;
+    return @"Not implemented yet!";
 }
 @end
 
@@ -182,7 +182,17 @@ static NSMutableDictionary *_symbolLookup;
 }
 
 -(id) evalFunc:(BLCons*)cons {
-    BLLambda *fetchedLambda = [_symbolLookup valueForKey:cons.car];
+    
+    id key = nil;
+    if ([cons.car isKindOfClass:BLCons.class]) {
+	// attempt to eval it
+	key = [self eval:cons.car];
+	NSLog(@"aKey: %@", key);
+    } else {
+	key = cons.car;
+    }
+    
+    BLLambda *fetchedLambda = [key isKindOfClass:BLLambda.class] ? key : [_symbolLookup valueForKey:key];
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     

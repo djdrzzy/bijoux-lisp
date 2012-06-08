@@ -18,6 +18,7 @@
 @end
 
 @interface BLLambdaEval : BLLambda
+-(id) evalArgs:(BLCons*)cons;
 @end
 
 @interface BLLambdaAtom : BLLambda

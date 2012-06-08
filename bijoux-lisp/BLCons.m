@@ -25,8 +25,27 @@
     return [self initWithCar:nil cdr:nil];
 }
 
--(BOOL) atom {
-    return NO;
+- (id)copyWithZone:(NSZone *)zone {
+    return [[BLCons alloc] initWithCar:[self.car copy] 
+				   cdr:[self.cdr copy]];
+}
+
+-(void) replaceAtomsMatching:(id)match withReplacement:(id)replacement {
+    if ([self.car isKindOfClass:BLCons.class]) {
+	[self.car replaceAtomsMatching:match withReplacement:replacement];
+    } else {
+	if ([self.car isEqual:match]) {
+	    self.car = replacement;
+	}
+    }
+    
+    if ([self.cdr isKindOfClass:BLCons.class]) {
+	[self.cdr replaceAtomsMatching:match withReplacement:replacement];
+    } else {
+	if ([self.cdr isEqual:match]) {
+	    self.cdr = replacement;
+	}
+    }
 }
 
 -(NSString*) descriptionWithOpeningParenthesis:(BOOL)openingPar {

@@ -133,12 +133,27 @@ static NSMutableDictionary *_symbolLookup;
 // We need to replace the parameter values with their parameters here...
 // Then we can try this out...
 // > ((lambda (x) (+ x x x)) 5) => 15
--(id) eval:(id)sexp {
+-(id) eval:(BLCons*)sexp {
+    
+    BLCons *argsCopy = [_args copy];
+    BLCons *bodyCopy = [_body.car copy];
+    
+    while (argsCopy) {
+	id argsHead = argsCopy.car;
+	id sexpHead = sexp.car;
+	
+	argsCopy = argsCopy.cdr;
+	sexp = sexp.cdr;
+	
+	[bodyCopy replaceAtomsMatching:argsHead withReplacement:sexpHead];
+	
+	NSLog(@"argsHEad: %@", argsHead);
+	NSLog(@"sexpHead: %@", sexpHead);
+	NSLog(@"bodyCopy: %@", bodyCopy);
+    }
     
     
-    
-    
-    return @"Not implemented yet!";
+    return [[[BLLambdaEval alloc] init] eval:bodyCopy];
 }
 @end
 
@@ -163,7 +178,12 @@ static NSMutableDictionary *_symbolLookup;
 
 -(id) evalAtom:(id)atom {
     NSAssert([atom isKindOfClass:NSString.class]
-	     || [atom isKindOfClass:BLLambdaLambdaLambda.class], @"Atom must be an NSString or lambda for now.");
+	     || [atom isKindOfClass:BLLambdaLambdaLambda.class]
+	     || [atom isKindOfClass:NSDecimalNumber.class], @"Atom must be an NSString or lambda for now.");
+    
+    if ([atom isKindOfClass:NSDecimalNumber.class]) {
+	return atom;
+    }
     
     return [atom isKindOfClass:NSString.class] ? [NSDecimalNumber decimalNumberWithString:atom] : atom;
 }

@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BLCons : NSObject
+@interface BLCons : NSObject <NSCopying>
 @property (strong, nonatomic) id car;
 @property (strong, nonatomic) id cdr;
 -(id) initWithCar:(id)car cdr:(id)cdr;
+-(void) replaceAtomsMatching:(id)match withReplacement:(id)replacement;
 @end

@@ -26,6 +26,7 @@ static NSMutableDictionary *_symbolLookup;
     [_symbolLookup setValue:[[BLLambdaEqual alloc] init] forKey:@"eq?"];
     [_symbolLookup setValue:[[BLLambdaCons alloc] init] forKey:@"cons"];
     [_symbolLookup setValue:[[BLLambdaLambda alloc] init] forKey:@"lambda"];
+    [_symbolLookup setValue:[[BLLambdaLabel alloc] init] forKey:@"label"];
 }
 
 - (id)init {
@@ -146,10 +147,6 @@ static NSMutableDictionary *_symbolLookup;
 	sexp = sexp.cdr;
 	
 	[bodyCopy replaceAtomsMatching:argsHead withReplacement:sexpHead];
-	
-	NSLog(@"argsHEad: %@", argsHead);
-	NSLog(@"sexpHead: %@", sexpHead);
-	NSLog(@"bodyCopy: %@", bodyCopy);
     }
     
     
@@ -160,6 +157,18 @@ static NSMutableDictionary *_symbolLookup;
 @implementation BLLambdaLambda 
 -(id) eval:(id)sexp {
     return [[BLLambdaLambdaLambda alloc] initWithArgs:[sexp car] body:[sexp cdr]];
+}
+@end
+
+@implementation BLLambdaLabel 
+-(id) eval:(BLCons*)sexp {
+    
+    id label = sexp.car;
+    id value = [[sexp cdr] car];
+    
+    [_symbolLookup setValue:value forKey:label];
+    
+    return value;
 }
 @end
 
@@ -179,13 +188,20 @@ static NSMutableDictionary *_symbolLookup;
 -(id) evalAtom:(id)atom {
     NSAssert([atom isKindOfClass:NSString.class]
 	     || [atom isKindOfClass:BLLambdaLambdaLambda.class]
-	     || [atom isKindOfClass:NSDecimalNumber.class], @"Atom must be an NSString or lambda for now.");
+	     || [atom isKindOfClass:NSDecimalNumber.class], @"Atom must be an NSString, NSDecimalNumber or lambda for now.");
     
     if ([atom isKindOfClass:NSDecimalNumber.class]) {
 	return atom;
+    } else if ([atom isKindOfClass:NSString.class]) {
+	id val = [_symbolLookup valueForKey:atom];
+	if (val) {
+	    return val;
+	}
     }
     
-    return [atom isKindOfClass:NSString.class] ? [NSDecimalNumber decimalNumberWithString:atom] : atom;
+    NSDecimalNumber *wasANum = [NSDecimalNumber decimalNumberWithString:atom];
+    
+    return [wasANum isEqual:[NSDecimalNumber notANumber]] ? atom : wasANum;
 }
 
 -(id) evalArgs:(BLCons*)cons {
@@ -207,7 +223,6 @@ static NSMutableDictionary *_symbolLookup;
     if ([cons.car isKindOfClass:BLCons.class]) {
 	// attempt to eval it
 	key = [self eval:cons.car];
-	NSLog(@"aKey: %@", key);
     } else {
 	key = cons.car;
     }

@@ -41,3 +41,6 @@
 
 @interface BLLambdaLambda : BLLambda
 @end
+
+@interface BLLambdaLabel : BLLambda
+@end

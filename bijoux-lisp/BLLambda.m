@@ -8,11 +8,11 @@
 
 #import "BLLambda.h"
 
+#import "BLCons.h"
+
 static NSMutableDictionary *_symbolLookup;
 
-@implementation BLLambda {
-
-}
+@implementation BLLambda
 
 +(void) createInitialSymbolLookup {
     _symbolLookup = [NSMutableDictionary dictionary];
@@ -52,7 +52,7 @@ static NSMutableDictionary *_symbolLookup;
     if (!cons) {
 	return [NSDecimalNumber numberWithDouble:0.0];
     }
-        
+    
     NSDecimalNumber *firstVal = cons.car;
     NSDecimalNumber *secondVal = [[[BLLambdaAdd alloc] init] eval:cons.cdr];
     
@@ -163,10 +163,10 @@ static NSMutableDictionary *_symbolLookup;
 @implementation BLLambdaLabel 
 -(id) eval:(BLCons*)sexp {
     
-    id label = sexp.car;
-    id value = [[sexp cdr] car];
+    id label = sexp.car; // When we get symbols change this to one
+    id value = [[[BLLambdaEval alloc] init] eval:[[sexp cdr] car]];
     
-    [_symbolLookup setValue:value forKey:label];
+    [_symbolLookup setValue:value forKey:label];    
     
     return value;
 }
@@ -199,6 +199,8 @@ static NSMutableDictionary *_symbolLookup;
 	}
     }
     
+    // This conversion here really should be going through a lisp reader of sorts
+    // Following the common lisp reader would be cool.
     NSDecimalNumber *wasANum = [NSDecimalNumber decimalNumberWithString:atom];
     
     return [wasANum isEqual:[NSDecimalNumber notANumber]] ? atom : wasANum;
@@ -231,10 +233,10 @@ static NSMutableDictionary *_symbolLookup;
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     
-    NSSet *setToNotEvalArgs = [NSSet setWithObjects:@"quote", @"lambda", nil];
+    NSSet *setToNotEvalArgs = [NSSet setWithObjects:@"quote", @"lambda", @"label", nil];
     
     id resultToEval = [setToNotEvalArgs containsObject:cons.car] ? cons.cdr : [self evalArgs:cons.cdr];
-        
+    
     if ([fetchedLambda isKindOfClass:BLLambdaEval.class]) {
 	return [self eval:[resultToEval car]];
     }

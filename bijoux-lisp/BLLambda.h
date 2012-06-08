@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "BLCons.h"
 
+// TODO: Make this base class a protocol
 @interface BLLambda : NSObject
 -(id) eval:(id)sexp;
 @end
@@ -18,7 +18,6 @@
 @end
 
 @interface BLLambdaEval : BLLambda
--(id) evalArgs:(BLCons*)cons;
 @end
 
 @interface BLLambdaAtom : BLLambda

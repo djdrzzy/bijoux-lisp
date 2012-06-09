@@ -27,14 +27,15 @@ static NSMutableDictionary *_symbolLookup;
     [_symbolLookup setValue:[[BLLambdaCons alloc] init] forKey:@"cons"];
     [_symbolLookup setValue:[[BLLambdaLambda alloc] init] forKey:@"lambda"];
     [_symbolLookup setValue:[[BLLambdaLabel alloc] init] forKey:@"label"];
+    [_symbolLookup setValue:[[BLLambdaCond alloc] init] forKey:@"cond"];
 }
 
 - (id)init {
     self = [super init];
     if (self) {
-	if (!_symbolLookup) {
-	    [BLLambda createInitialSymbolLookup];
-	}
+        if (!_symbolLookup) {
+            [BLLambda createInitialSymbolLookup];
+        }
     }
     return self;
 }
@@ -50,7 +51,7 @@ static NSMutableDictionary *_symbolLookup;
 
 -(id) eval:(BLCons*)cons {
     if (!cons) {
-	return [NSDecimalNumber numberWithDouble:0.0];
+        return [NSDecimalNumber numberWithDouble:0.0];
     }
     
     NSDecimalNumber *firstVal = cons.car;
@@ -87,7 +88,7 @@ static NSMutableDictionary *_symbolLookup;
 @implementation BLLambdaEqual
 -(id) eval:(BLCons*)cons {
     if (!cons) {
-	return [NSNumber numberWithBool:YES];
+        return [NSNumber numberWithBool:YES];
     }
     
     id firstVal = cons.car;
@@ -104,7 +105,7 @@ static NSMutableDictionary *_symbolLookup;
     id second = [cons.cdr car];
     
     return [[BLCons alloc] initWithCar:first
-				   cdr:second];
+                                   cdr:second];
     
 }
 
@@ -123,8 +124,8 @@ static NSMutableDictionary *_symbolLookup;
     self = [super init];
     
     if (self) {
-	_args = args;
-	_body = body;
+        _args = args;
+        _body = body;
     }
     
     return self;
@@ -140,13 +141,13 @@ static NSMutableDictionary *_symbolLookup;
     BLCons *bodyCopy = [_body.car copy];
     
     while (argsCopy) {
-	id argsHead = argsCopy.car;
-	id sexpHead = sexp.car;
-	
-	argsCopy = argsCopy.cdr;
-	sexp = sexp.cdr;
-	
-	[bodyCopy replaceAtomsMatching:argsHead withReplacement:sexpHead];
+        id argsHead = argsCopy.car;
+        id sexpHead = sexp.car;
+        
+        argsCopy = argsCopy.cdr;
+        sexp = sexp.cdr;
+        
+        [bodyCopy replaceAtomsMatching:argsHead withReplacement:sexpHead];
     }
     
     
@@ -176,27 +177,27 @@ static NSMutableDictionary *_symbolLookup;
 
 -(id) eval:(id)sexp {
     if (!sexp) {
-	return nil;
+        return nil;
     }
     
     return ([sexp isKindOfClass:BLCons.class]
-	    ? [self evalFunc:sexp]
-	    : [self evalAtom:sexp]);
+            ? [self evalFunc:sexp]
+            : [self evalAtom:sexp]);
     
 }
 
 -(id) evalAtom:(id)atom {
     NSAssert([atom isKindOfClass:NSString.class]
-	     || [atom isKindOfClass:BLLambdaLambdaLambda.class]
-	     || [atom isKindOfClass:NSDecimalNumber.class], @"Atom must be an NSString, NSDecimalNumber or lambda for now.");
+             || [atom isKindOfClass:BLLambdaLambdaLambda.class]
+             || [atom isKindOfClass:NSDecimalNumber.class], @"Atom must be an NSString, NSDecimalNumber or lambda for now.");
     
     if ([atom isKindOfClass:NSDecimalNumber.class]) {
-	return atom;
+        return atom;
     } else if ([atom isKindOfClass:NSString.class]) {
-	id val = [_symbolLookup valueForKey:atom];
-	if (val) {
-	    return val;
-	}
+        id val = [_symbolLookup valueForKey:atom];
+        if (val) {
+            return val;
+        }
     }
     
     // This conversion here really should be going through a lisp reader of sorts
@@ -209,38 +210,63 @@ static NSMutableDictionary *_symbolLookup;
 -(id) evalArgs:(BLCons*)cons {
     
     if (!cons) {
-	return nil;
+        return nil;
     }
     
     id first = [cons car];
     id rest = [cons cdr];
     
     return [[BLCons alloc] initWithCar:[self eval:first] 
-				   cdr:[self evalArgs:rest]];
+                                   cdr:[self evalArgs:rest]];
 }
 
 -(id) evalFunc:(BLCons*)cons {
     
     id key = nil;
     if ([cons.car isKindOfClass:BLCons.class]) {
-	// attempt to eval it
-	key = [self eval:cons.car];
+        // attempt to eval it
+        key = [self eval:cons.car];
     } else {
-	key = cons.car;
+        key = cons.car;
     }
     
     BLLambda *fetchedLambda = [key isKindOfClass:BLLambda.class] ? key : [_symbolLookup valueForKey:key];
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     
-    NSSet *setToNotEvalArgs = [NSSet setWithObjects:@"quote", @"lambda", @"label", nil];
+    NSSet *setToNotEvalArgs = [NSSet setWithObjects:@"quote", @"lambda", @"label", @"cond", nil];
     
     id resultToEval = [setToNotEvalArgs containsObject:cons.car] ? cons.cdr : [self evalArgs:cons.cdr];
     
     if ([fetchedLambda isKindOfClass:BLLambdaEval.class]) {
-	return [self eval:[resultToEval car]];
+        return [self eval:[resultToEval car]];
     }
     
     return [fetchedLambda eval:resultToEval];
+}
+@end
+
+@implementation BLLambdaCond 
+-(id) evalConditionResultPair:(BLCons*)conditionResultPair
+                othersToCheck:(BLCons*)othersToCheck {
+    
+    if (!conditionResultPair) {
+        return nil;
+    }
+    
+    BLCons *condition = conditionResultPair.car;
+    BLCons *resultToReturn = [[conditionResultPair cdr] car];
+    
+    NSLog(@"condition: %@", condition);
+    NSLog(@"resultToReturn: %@", resultToReturn);
+    
+    return ([[[BLLambdaEval alloc] init] eval:condition]
+            ? [[[BLLambdaEval alloc] init] eval:resultToReturn]
+            : [self evalConditionResultPair:othersToCheck.car othersToCheck:othersToCheck.cdr]);
+}
+
+-(id) eval:(BLCons*)sexp {
+    return [self evalConditionResultPair:sexp.car
+                           othersToCheck:sexp.cdr];
 }
 @end

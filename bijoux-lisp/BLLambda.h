@@ -43,3 +43,6 @@
 
 @interface BLLambdaLabel : BLLambda
 @end
+
+@interface BLLambdaCond : BLLambda
+@end

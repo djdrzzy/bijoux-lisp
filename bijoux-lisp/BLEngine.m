@@ -27,14 +27,14 @@
 
 -(id) tokenize:(id)sexp {
     // So we break up by whitespace and ( and )
-        
+    
     // First we see if any of those tokens include a '(' or a ')'. If it does
     // then we break up after the '(' or before the ')'
     sexp = [sexp stringByReplacingOccurrencesOfString:@"(" 
-					   withString:@"( "];
+                                           withString:@"( "];
     
     sexp = [sexp stringByReplacingOccurrencesOfString:@")" 
-					   withString:@" ) "];
+                                           withString:@" ) "];
     
     
     // then we seperate by whitespace
@@ -44,10 +44,10 @@
      [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     id brokenUp = [NSMutableArray arrayWithArray:
-		    [sexp componentsSeparatedByCharactersInSet:characters]];
+                   [sexp componentsSeparatedByCharactersInSet:characters]];
     
     [brokenUp removeObject:@""];
-        
+    
     return brokenUp;
 }
 
@@ -55,27 +55,27 @@
     id token = [tokens nextToken];
     
     if ([token isEqualToString:@")"]) {
-	return nil;
+        return nil;
     } else if ([token isEqualToString:@"("]) {
-	id first = [self readTail:tokens];
-	id second = [self readTail:tokens];
-	
-	return [[BLCons alloc] initWithCar:first 
-				       cdr:second];
+        id first = [self readTail:tokens];
+        id second = [self readTail:tokens];
+        
+        return [[BLCons alloc] initWithCar:first 
+                                       cdr:second];
     } else {
-	id first = token;
-	id second = [self readTail:tokens];
-	
-	return [[BLCons alloc] initWithCar:first 
-				       cdr:second];
+        id first = token;
+        id second = [self readTail:tokens];
+        
+        return [[BLCons alloc] initWithCar:first 
+                                       cdr:second];
     }
 }
 
 -(id) read:(NSMutableArray*)tokens {
     id token = [tokens nextToken];
-        
+    
     if ([token isEqualToString:@"("]) {
-	return [self readTail:tokens];
+        return [self readTail:tokens];
     }
     
     return token;
@@ -83,14 +83,14 @@
 
 -(id) parseAndEval:(id)input {
     if (!input) {
-	return @"";
+        return @"";
     }
     
     id tokens = [self tokenize:input];
     
     // Creates our internal SEXP representation
     BLCons *formToEval = [self read:tokens];
-        
+    
     id result = [[[BLLambdaEval alloc] init] eval:formToEval];
     
     return result;

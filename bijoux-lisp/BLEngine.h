@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface BLEngine : NSObject
--(id) parseAndEval:(id)input;
+-(id) parseAndEval:(NSString*)input;
 @end

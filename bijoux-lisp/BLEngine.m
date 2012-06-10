@@ -11,6 +11,34 @@
 #import "BLCons.h"
 #import "BLLambda.h"
 
+@interface NSString (BLAdditions)
+-(BOOL) balancedParentheses;
+- (NSUInteger)occurrenceOfString:(NSString *)substring;
+@end
+
+@implementation NSString (BLAdditions)
+-(BOOL) balancedParentheses {
+    NSUInteger countOfLeft = [self occurrenceOfString:@"("];
+    NSUInteger countOfRight = [self occurrenceOfString:@")"];
+    NSLog(@"countOfLeft: %i", countOfLeft);
+    NSLog(@"countOfRight: %i", countOfRight);
+    return countOfLeft == countOfRight;
+}
+
+- (NSUInteger)occurrenceOfString:(NSString *)substring {
+    NSUInteger count = 0, length = [self length];
+    NSRange range = NSMakeRange(0, length); 
+    while(range.location != NSNotFound) {
+        range = [self rangeOfString:substring options:0 range:range];
+        if(range.location != NSNotFound) {
+            range = NSMakeRange(range.location + range.length, length - (range.location + range.length));
+            count++; 
+        }
+    }
+    return count;
+}
+@end
+
 @interface NSMutableArray (BLAdditions)
 -(id) nextToken;
 @end
@@ -23,7 +51,9 @@
 }
 @end
 
-@implementation BLEngine
+@implementation BLEngine {
+    NSString *_storedInput;
+}
 
 -(id) tokenize:(id)sexp {
     // So we break up by whitespace and ( and )
@@ -81,19 +111,33 @@
     return token;
 }
 
--(id) parseAndEval:(id)input {
+-(id) parseAndEval:(NSString*)input {
     if (!input) {
         return @"";
     }
     
-    id tokens = [self tokenize:input];
+    _storedInput = (_storedInput
+                    ? [_storedInput stringByAppendingString:input]
+                    : input);
     
-    // Creates our internal SEXP representation
-    BLCons *formToEval = [self read:tokens];
     
-    id result = [[[BLLambdaEval alloc] init] eval:formToEval];
-    
-    return result;
+    if ([_storedInput balancedParentheses]) {
+        // We only continue if we have a balanced amount of ( and )
+        // else we save what we have so far and wait for more input
+        // We return nil if we are waiting else we return the result
+        id tokens = [self tokenize:_storedInput];
+        
+        _storedInput = nil;
+        
+        // Creates our internal SEXP representation
+        BLCons *formToEval = [self read:tokens];
+        
+        id result = [[[BLLambdaEval alloc] init] eval:formToEval];
+        
+        return result;
+    } else {
+        return nil;
+    }
 }
 
 @end

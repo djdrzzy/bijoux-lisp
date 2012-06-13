@@ -9,43 +9,7 @@
 #import "BLLambda.h"
 
 #import "BLCons.h"
-
-static NSMutableDictionary *_symbolLookup;
-
-@implementation BLLambda
-
-+(void) createInitialSymbolLookup {
-    _symbolLookup = [NSMutableDictionary dictionary];
-    
-    [_symbolLookup setValue:[[BLLambdaAdd alloc] init] forKey:@"+"];
-    [_symbolLookup setValue:[[BLLambdaEval alloc] init] forKey:@"eval"];
-    [_symbolLookup setValue:[[BLLambdaAtom alloc] init] forKey:@"atom?"];
-    [_symbolLookup setValue:[[BLLambdaQuote alloc] init] forKey:@"quote"];
-    [_symbolLookup setValue:[[BLLambdaCar alloc] init] forKey:@"car"];
-    [_symbolLookup setValue:[[BLLambdaCdr alloc] init] forKey:@"cdr"];
-    [_symbolLookup setValue:[[BLLambdaEqual alloc] init] forKey:@"eq?"];
-    [_symbolLookup setValue:[[BLLambdaCons alloc] init] forKey:@"cons"];
-    [_symbolLookup setValue:[[BLLambdaLambda alloc] init] forKey:@"lambda"];
-    [_symbolLookup setValue:[[BLLambdaLabel alloc] init] forKey:@"label"];
-    [_symbolLookup setValue:[[BLLambdaCond alloc] init] forKey:@"cond"];
-}
-
-- (id)init {
-    self = [super init];
-    if (self) {
-        if (!_symbolLookup) {
-            [BLLambda createInitialSymbolLookup];
-        }
-    }
-    return self;
-}
-
--(id) eval:(id)sexp {
-    return sexp;
-}
-
-@end
-
+#import "BLSymbolTable.h"
 
 @implementation BLLambdaAdd
 
@@ -167,7 +131,7 @@ static NSMutableDictionary *_symbolLookup;
     id label = sexp.car; // When we get symbols change this to one
     id value = [[[BLLambdaEval alloc] init] eval:[[sexp cdr] car]];
     
-    [_symbolLookup setValue:value forKey:label];    
+    [[BLSymbolTable sharedInstance] setValue:value forSymbol:label];    
     
     return value;
 }
@@ -194,7 +158,7 @@ static NSMutableDictionary *_symbolLookup;
     if ([atom isKindOfClass:NSDecimalNumber.class]) {
         return atom;
     } else if ([atom isKindOfClass:NSString.class]) {
-        id val = [_symbolLookup valueForKey:atom];
+        id val = [[BLSymbolTable sharedInstance] valueForSymbol:atom];
         if (val) {
             return val;
         }
@@ -230,7 +194,7 @@ static NSMutableDictionary *_symbolLookup;
         key = cons.car;
     }
     
-    BLLambda *fetchedLambda = [key isKindOfClass:BLLambda.class] ? key : [_symbolLookup valueForKey:key];
+    id<BLLambda> fetchedLambda = [key conformsToProtocol:@protocol(BLLambda)] ? key : [[BLSymbolTable sharedInstance] valueForSymbol:key];
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     
@@ -256,9 +220,6 @@ static NSMutableDictionary *_symbolLookup;
     
     BLCons *condition = conditionResultPair.car;
     BLCons *resultToReturn = [[conditionResultPair cdr] car];
-    
-    NSLog(@"condition: %@", condition);
-    NSLog(@"resultToReturn: %@", resultToReturn);
     
     return ([[[BLLambdaEval alloc] init] eval:condition]
             ? [[[BLLambdaEval alloc] init] eval:resultToReturn]

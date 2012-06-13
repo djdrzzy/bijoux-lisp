@@ -9,40 +9,41 @@
 #import <Foundation/Foundation.h>
 
 
-// TODO: Make this base class a protocol
-@interface BLLambda : NSObject
--(id) eval:(id)sexp;
+@protocol BLLambda <NSObject>
+@required
+-(id) eval:(id)form;
 @end
 
-@interface BLLambdaAdd : BLLambda
+
+@interface BLLambdaAdd : NSObject <BLLambda>
 @end
 
-@interface BLLambdaEval : BLLambda
+@interface BLLambdaEval : NSObject <BLLambda>
 @end
 
-@interface BLLambdaAtom : BLLambda
+@interface BLLambdaAtom : NSObject <BLLambda>
 @end
 
-@interface BLLambdaQuote : BLLambda
+@interface BLLambdaQuote : NSObject <BLLambda>
 @end
 
-@interface BLLambdaCar : BLLambda
+@interface BLLambdaCar : NSObject <BLLambda>
 @end
 
-@interface BLLambdaCdr : BLLambda
+@interface BLLambdaCdr : NSObject <BLLambda>
 @end
 
-@interface BLLambdaEqual : BLLambda
+@interface BLLambdaEqual : NSObject <BLLambda>
 @end
 
-@interface BLLambdaCons : BLLambda 
+@interface BLLambdaCons : NSObject <BLLambda> 
 @end
 
-@interface BLLambdaLambda : BLLambda
+@interface BLLambdaLambda : NSObject <BLLambda>
 @end
 
-@interface BLLambdaLabel : BLLambda
+@interface BLLambdaLabel : NSObject <BLLambda>
 @end
 
-@interface BLLambdaCond : BLLambda
+@interface BLLambdaCond : NSObject <BLLambda>
 @end

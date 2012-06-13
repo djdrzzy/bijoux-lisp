@@ -20,8 +20,6 @@
 -(BOOL) balancedParentheses {
     NSUInteger countOfLeft = [self occurrenceOfString:@"("];
     NSUInteger countOfRight = [self occurrenceOfString:@")"];
-    NSLog(@"countOfLeft: %i", countOfLeft);
-    NSLog(@"countOfRight: %i", countOfRight);
     return countOfLeft == countOfRight;
 }
 

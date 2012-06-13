@@ -28,19 +28,37 @@
     if (self) {
         _symbolLookup = [NSMutableDictionary dictionary];
 	
-	[_symbolLookup setValue:[BLLambdaAdd new] forKey:[BLLambdaAdd symbolLabel]];
-	[_symbolLookup setValue:[BLLambdaEval new] forKey:[BLLambdaEval symbolLabel]];
-	[_symbolLookup setValue:[BLLambdaAtom new] forKey:[BLLambdaAtom symbolLabel]];
-	[_symbolLookup setValue:[BLLambdaQuote new] forKey:[BLLambdaQuote symbolLabel]];
-	[_symbolLookup setValue:[BLLambdaCar new] forKey:[BLLambdaCar symbolLabel]];
-	[_symbolLookup setValue:[BLLambdaCdr new] forKey:[BLLambdaCdr symbolLabel]];
-	[_symbolLookup setValue:[BLLambdaEqual new] forKey:[BLLambdaEqual symbolLabel]];
-	[_symbolLookup setValue:[BLLambdaCons new] forKey:[BLLambdaCons symbolLabel]];
-	[_symbolLookup setValue:[BLLambdaLambda new] forKey:[BLLambdaLambda symbolLabel]];
-	[_symbolLookup setValue:[BLLambdaLabel new] forKey:[BLLambdaLabel symbolLabel]];
-	[_symbolLookup setValue:[BLLambdaCond new] forKey:[BLLambdaCond symbolLabel]];
+	NSArray *arrayOfInitialLambdaClasses = [[NSArray alloc] initWithObjects:
+						BLLambdaAdd.class,
+						BLLambdaEval.class,
+						BLLambdaAtom.class,
+						BLLambdaQuote.class,
+						BLLambdaCar.class,
+						BLLambdaCdr.class,
+						BLLambdaEqual.class,
+						BLLambdaCons.class,
+						BLLambdaLambda.class,
+						BLLambdaLabel.class,
+						BLLambdaCond.class,
+						nil];
+	
+	for (Class lambdaClass in arrayOfInitialLambdaClasses) {
+	    [self addSymbolForLambdaClass:lambdaClass];
+	}
+	
     }
     return self;
+}
+
+-(void) addSymbolForLambdaClass:(Class)class {
+    id lambdaObj = [class new];
+    
+    NSAssert([lambdaObj conformsToProtocol:@protocol(BLLambda)],
+	     @"Should conform to the BLLambda protocol...");
+    
+    id symbolLabel = [class symbolLabel];
+    
+    [_symbolLookup setValue:lambdaObj forKey:symbolLabel];
 }
 
 -(id) valueForSymbol:(id)symbol {

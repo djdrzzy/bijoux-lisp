@@ -20,6 +20,8 @@
 		158A1B2E1484A7C1009A5CA4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1B2D1484A7C1009A5CA4 /* CFNetwork.framework */; };
 		158A1B341484AC8E009A5CA4 /* BLEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B331484AC8E009A5CA4 /* BLEngine.m */; };
 		158A1B371484AEC7009A5CA4 /* BLCons.m in Sources */ = {isa = PBXBuildFile; fileRef = 158A1B361484AEC7009A5CA4 /* BLCons.m */; };
+		15BF851515885030008EE49E /* Pass-To-Bijoux.workflow in Resources */ = {isa = PBXBuildFile; fileRef = 15BF851415885030008EE49E /* Pass-To-Bijoux.workflow */; };
+		15BF851715885047008EE49E /* README in Resources */ = {isa = PBXBuildFile; fileRef = 15BF851615885047008EE49E /* README */; };
 		15D782E8157D6D1500E204BC /* BLLambda.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D782E7157D6D1500E204BC /* BLLambda.m */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +70,8 @@
 		158A1B331484AC8E009A5CA4 /* BLEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEngine.m; sourceTree = "<group>"; };
 		158A1B351484AEC7009A5CA4 /* BLCons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLCons.h; sourceTree = "<group>"; };
 		158A1B361484AEC7009A5CA4 /* BLCons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCons.m; sourceTree = "<group>"; };
+		15BF851415885030008EE49E /* Pass-To-Bijoux.workflow */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "Pass-To-Bijoux.workflow"; sourceTree = "<group>"; };
+		15BF851615885047008EE49E /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		15D782E6157D6D1500E204BC /* BLLambda.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLLambda.h; sourceTree = "<group>"; };
 		15D782E7157D6D1500E204BC /* BLLambda.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLLambda.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,7 +95,9 @@
 		158A1AE81484A2DB009A5CA4 = {
 			isa = PBXGroup;
 			children = (
+				15BF851615885047008EE49E /* README */,
 				158A1AFD1484A2DB009A5CA4 /* bijoux-lisp */,
+				15BF851315884FEE008EE49E /* Resources */,
 				158A1B171484A444009A5CA4 /* lib */,
 				158A1AF61484A2DB009A5CA4 /* Frameworks */,
 				158A1AF41484A2DB009A5CA4 /* Products */,
@@ -163,6 +169,14 @@
 				158A1B241484A467009A5CA4 /* librmi.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		15BF851315884FEE008EE49E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				15BF851415885030008EE49E /* Pass-To-Bijoux.workflow */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -243,6 +257,8 @@
 				158A1B021484A2DB009A5CA4 /* InfoPlist.strings in Resources */,
 				158A1B0E1484A2DC009A5CA4 /* BLViewController_iPhone.xib in Resources */,
 				158A1B111484A2DC009A5CA4 /* BLViewController_iPad.xib in Resources */,
+				15BF851515885030008EE49E /* Pass-To-Bijoux.workflow in Resources */,
+				15BF851715885047008EE49E /* README in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

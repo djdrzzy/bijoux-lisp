@@ -37,10 +37,10 @@
     [self.window makeKeyAndVisible];
     
     self.blengine = [[BLEngine alloc] init];
-    
+        
     self.rmi = [[RemoteMessageInterface alloc] initWithWelcomeMessage:@"Welcome to bijoux-lisp repl!" andPrompt:@"\n>"];
     self.rmi.delegate = self;
-    [self.rmi startOnSocket:40000];
+    [self.rmi startOnSocket:40008];
     
     return YES;
 }

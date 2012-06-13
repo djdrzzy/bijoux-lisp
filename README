@@ -1,0 +1,5 @@
+This project is a simple lisp that I've made to play around with. Nothing that
+you would use in a production environment.
+
+If you install the 'Pass-To-Bijoux.workflow' Automator action as a Service and
+assign a keyboard shortcut to it you have a poor mans SLIME.

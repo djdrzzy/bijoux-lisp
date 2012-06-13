@@ -13,56 +13,89 @@
 
 @implementation BLLambdaAdd
 
++(id) symbolLabel {
+    return @"+";
+}
+
 -(id) eval:(BLCons*)cons {
     if (!cons) {
         return [NSDecimalNumber numberWithDouble:0.0];
     }
     
     NSDecimalNumber *firstVal = cons.car;
-    NSDecimalNumber *secondVal = [[[BLLambdaAdd alloc] init] eval:cons.cdr];
+    NSDecimalNumber *secondVal = [[BLLambdaAdd new] eval:cons.cdr];
     
     return [firstVal decimalNumberByAdding:secondVal];
 }
 @end
 
 @implementation BLLambdaAtom
+
++(id) symbolLabel {
+    return @"atom?";
+}
+
 -(id) eval:(BLCons*)cons {
     return [cons.car isKindOfClass:BLCons.class] ? nil : cons.car;
 }
 @end
 
 @implementation BLLambdaQuote
+
++(id) symbolLabel {
+    return @"quote";
+}
+
 -(id) eval:(BLCons*)cons {
     return [cons car];
 }
 @end
 
 @implementation BLLambdaCar
+
++(id) symbolLabel {
+    return @"car";
+}
+
 -(id) eval:(BLCons*)cons {
     return [[cons car] car];
 }
 @end
 
 @implementation BLLambdaCdr
+
++(id) symbolLabel {
+    return @"cdr";
+}
+
 -(id) eval:(BLCons*)cons {
     return [[cons car] cdr];
 }
 @end
 
 @implementation BLLambdaEqual
+
++(id) symbolLabel {
+    return @"eq?";
+}
+
 -(id) eval:(BLCons*)cons {
     if (!cons) {
         return [NSNumber numberWithBool:YES];
     }
     
-    id firstVal = cons.car;
-    id secondVal = [[[BLLambdaEqual alloc] init] eval:cons.cdr];
+    id firstVal = [cons car];
+    id secondVal = [[cons cdr] car];
     
-    return [firstVal isEqual:secondVal] ? firstVal : nil;
+    return [firstVal isEqual:secondVal] ? firstVal : nil; // Should be our T value later...
 }
 @end
 
 @implementation BLLambdaCons
+
++(id) symbolLabel {
+    return @"cons";
+}
 
 -(id) eval:(BLCons*)cons {
     id first = cons.car;
@@ -95,10 +128,6 @@
     return self;
 }
 
-
-// We need to replace the parameter values with their parameters here...
-// Then we can try this out...
-// > ((lambda (x) (+ x x x)) 5) => 15
 -(id) eval:(BLCons*)sexp {
     
     BLCons *argsCopy = [_args copy];
@@ -119,13 +148,23 @@
 }
 @end
 
-@implementation BLLambdaLambda 
+@implementation BLLambdaLambda
+
++(id) symbolLabel {
+    return @"lambda";
+}
+
 -(id) eval:(id)sexp {
     return [[BLLambdaLambdaLambda alloc] initWithArgs:[sexp car] body:[sexp cdr]];
 }
 @end
 
 @implementation BLLambdaLabel 
+
++(id) symbolLabel {
+    return @"label";
+}
+
 -(id) eval:(BLCons*)sexp {
     
     id label = sexp.car; // When we get symbols change this to one
@@ -138,6 +177,10 @@
 @end
 
 @implementation BLLambdaEval
+
++(id) symbolLabel {
+    return @"eval";
+}
 
 -(id) eval:(id)sexp {
     if (!sexp) {
@@ -198,7 +241,12 @@
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     
-    NSSet *setToNotEvalArgs = [NSSet setWithObjects:@"quote", @"lambda", @"label", @"cond", nil];
+    NSSet *setToNotEvalArgs = [NSSet setWithObjects:
+			       [BLLambdaQuote symbolLabel], 
+			       [BLLambdaLambda symbolLabel], 
+			       [BLLambdaLabel symbolLabel], 
+			       [BLLambdaCond symbolLabel], 
+			       nil];
     
     id resultToEval = [setToNotEvalArgs containsObject:cons.car] ? cons.cdr : [self evalArgs:cons.cdr];
     
@@ -211,6 +259,11 @@
 @end
 
 @implementation BLLambdaCond 
+
++(id) symbolLabel {
+    return @"cond";
+}
+
 -(id) evalConditionResultPair:(BLCons*)conditionResultPair
                 othersToCheck:(BLCons*)othersToCheck {
     

@@ -28,17 +28,17 @@
     if (self) {
         _symbolLookup = [NSMutableDictionary dictionary];
 	
-	[_symbolLookup setValue:[[BLLambdaAdd alloc] init] forKey:@"+"];
-	[_symbolLookup setValue:[[BLLambdaEval alloc] init] forKey:@"eval"];
-	[_symbolLookup setValue:[[BLLambdaAtom alloc] init] forKey:@"atom?"];
-	[_symbolLookup setValue:[[BLLambdaQuote alloc] init] forKey:@"quote"];
-	[_symbolLookup setValue:[[BLLambdaCar alloc] init] forKey:@"car"];
-	[_symbolLookup setValue:[[BLLambdaCdr alloc] init] forKey:@"cdr"];
-	[_symbolLookup setValue:[[BLLambdaEqual alloc] init] forKey:@"eq?"];
-	[_symbolLookup setValue:[[BLLambdaCons alloc] init] forKey:@"cons"];
-	[_symbolLookup setValue:[[BLLambdaLambda alloc] init] forKey:@"lambda"];
-	[_symbolLookup setValue:[[BLLambdaLabel alloc] init] forKey:@"label"];
-	[_symbolLookup setValue:[[BLLambdaCond alloc] init] forKey:@"cond"];
+	[_symbolLookup setValue:[BLLambdaAdd new] forKey:[BLLambdaAdd symbolLabel]];
+	[_symbolLookup setValue:[BLLambdaEval new] forKey:[BLLambdaEval symbolLabel]];
+	[_symbolLookup setValue:[BLLambdaAtom new] forKey:[BLLambdaAtom symbolLabel]];
+	[_symbolLookup setValue:[BLLambdaQuote new] forKey:[BLLambdaQuote symbolLabel]];
+	[_symbolLookup setValue:[BLLambdaCar new] forKey:[BLLambdaCar symbolLabel]];
+	[_symbolLookup setValue:[BLLambdaCdr new] forKey:[BLLambdaCdr symbolLabel]];
+	[_symbolLookup setValue:[BLLambdaEqual new] forKey:[BLLambdaEqual symbolLabel]];
+	[_symbolLookup setValue:[BLLambdaCons new] forKey:[BLLambdaCons symbolLabel]];
+	[_symbolLookup setValue:[BLLambdaLambda new] forKey:[BLLambdaLambda symbolLabel]];
+	[_symbolLookup setValue:[BLLambdaLabel new] forKey:[BLLambdaLabel symbolLabel]];
+	[_symbolLookup setValue:[BLLambdaCond new] forKey:[BLLambdaCond symbolLabel]];
     }
     return self;
 }

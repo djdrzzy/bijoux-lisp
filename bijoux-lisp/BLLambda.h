@@ -19,6 +19,9 @@
 @interface BLLambdaAdd : NSObject <BLLambda>
 @end
 
+@interface BLLambdaSubtract : NSObject <BLLambda>
+@end
+
 @interface BLLambdaEval : NSObject <BLLambda>
 @end
 

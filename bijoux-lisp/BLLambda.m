@@ -29,6 +29,25 @@
 }
 @end
 
+@implementation BLLambdaSubtract
+
++(id) symbolLabel {
+    return @"-";
+}
+
+-(id) eval:(BLCons*)cons {
+    if (!cons) {
+        return [NSDecimalNumber numberWithDouble:0.0];
+    }
+    
+    NSDecimalNumber *firstVal = cons.car;
+    NSDecimalNumber *secondVal = [[BLLambdaAdd new] eval:cons.cdr];
+    
+    return [firstVal decimalNumberBySubtracting:secondVal];
+}
+@end
+
+
 @implementation BLLambdaAtom
 
 +(id) symbolLabel {

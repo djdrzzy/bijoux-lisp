@@ -11,34 +11,9 @@
 #import "BLCons.h"
 #import "BLLambda.h"
 
-@interface NSString (BLAdditions)
--(BOOL) balancedParentheses;
-- (NSUInteger)occurrenceOfString:(NSString *)substring;
-@end
-
-@implementation NSString (BLAdditions)
--(BOOL) balancedParentheses {
-    NSUInteger countOfLeft = [self occurrenceOfString:@"("];
-    NSUInteger countOfRight = [self occurrenceOfString:@")"];
-    return countOfLeft == countOfRight;
-}
-
-- (NSUInteger)occurrenceOfString:(NSString *)substring {
-    NSUInteger count = 0, length = [self length];
-    NSRange range = NSMakeRange(0, length); 
-    while(range.location != NSNotFound) {
-        range = [self rangeOfString:substring options:0 range:range];
-        if(range.location != NSNotFound) {
-            range = NSMakeRange(range.location + range.length, length - (range.location + range.length));
-            count++; 
-        }
-    }
-    return count;
-}
-@end
-
 @interface NSMutableArray (BLAdditions)
 -(id) nextToken;
+-(id) cutFirstBalancedExpression;
 @end
 
 @implementation NSMutableArray (BLAdditions)
@@ -47,10 +22,43 @@
     [self removeObjectAtIndex:0];
     return firstElement;
 }
+-(id) cutFirstBalancedExpression {
+    NSMutableArray *tokensToReturn = [NSMutableArray array];
+    int lefties = 0;
+    int righties = 0;
+    for (NSUInteger i = 0; i < self.count; i++) {
+	id fetchedObject = [self objectAtIndex:i];
+	NSAssert(i == 0 ? [fetchedObject isEqualToString:@"("] : YES, @"Must start with an opening parenthesis");
+	
+	if ([fetchedObject isEqualToString:@"("]) {
+	    lefties++;
+	} else if ([fetchedObject isEqualToString:@")"]) {
+	    righties++;
+	}
+	
+	[tokensToReturn addObject:fetchedObject];
+	
+	if (lefties == righties) {
+	    [self removeObjectsInRange:NSMakeRange(0, i + 1)];
+	    return tokensToReturn;
+	}
+    }
+    
+    return nil;
+}
 @end
 
 @implementation BLEngine {
-    NSString *_storedInput;
+    NSMutableArray *_storedTokens;
+}
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _storedTokens = [[NSMutableArray alloc] init];
+    }
+    return self;
 }
 
 -(id) tokenize:(id)sexp {
@@ -114,28 +122,22 @@
         return @"";
     }
     
-    _storedInput = (_storedInput
-                    ? [_storedInput stringByAppendingString:input]
-                    : input);
+    // We only continue if we have a balanced amount of ( and )
+    // else we save what we have so far and wait for more input
+    // We return nil if we are waiting else we return the result
+    id tokens = [self tokenize:input];
     
+    [_storedTokens addObjectsFromArray:tokens];
     
-    if ([_storedInput balancedParentheses]) {
-        // We only continue if we have a balanced amount of ( and )
-        // else we save what we have so far and wait for more input
-        // We return nil if we are waiting else we return the result
-        id tokens = [self tokenize:_storedInput];
-        
-        _storedInput = nil;
-        
-        // Creates our internal SEXP representation
-        BLCons *formToEval = [self read:tokens];
-        
-        id result = [[[BLLambdaEval alloc] init] eval:formToEval];
-        
-        return result;
-    } else {
-        return nil;
+    id tokensToEval = nil;
+    id result = nil;
+    
+    while ((tokensToEval = [_storedTokens cutFirstBalancedExpression])) {
+	BLCons *formToEval = [self read:tokensToEval];
+	result = [[[BLLambdaEval alloc] init] eval:formToEval];
     }
+    
+    return result;
 }
 
 @end

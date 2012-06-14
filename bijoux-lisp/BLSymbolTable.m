@@ -30,6 +30,7 @@
 	
 	NSArray *arrayOfInitialLambdaClasses = [[NSArray alloc] initWithObjects:
 						BLLambdaAdd.class,
+						BLLambdaSubtract.class,
 						BLLambdaEval.class,
 						BLLambdaAtom.class,
 						BLLambdaQuote.class,

@@ -28,10 +28,11 @@
     self = [super init];
     if (self) {
         _symbolLookup = [NSMutableDictionary dictionary];
-	
+		
 	NSArray *arrayOfInitialLambdaClasses = [[NSArray alloc] initWithObjects:
 						BLLambdaAdd.class,
 						BLLambdaSubtract.class,
+						BLLambdaFuncall.class,
 						BLLambdaEval.class,
 						BLLambdaAtom.class,
 						BLLambdaQuote.class,
@@ -81,5 +82,11 @@
 -(BLSymbol*) symbolForName:(NSString*)name {
     return [_symbolLookup valueForKey:name];
 }
+
+-(id<BLLambda>) functionForName:(NSString*)name {
+    BLSymbol *symbol = [self symbolForName:name];
+    return symbol.value;
+}
+
 
 @end

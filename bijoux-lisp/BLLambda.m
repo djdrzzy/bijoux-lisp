@@ -49,6 +49,22 @@
 @end
 
 
+@implementation BLLambdaFuncall
+
++(id) symbolName {
+    return @"funcall";
+}
+
+-(id) eval:(BLCons*)cons {
+    id funcSymbolName = cons.car;
+    id<BLLambda> fetchedFunc = [[BLSymbolTable sharedInstance] functionForName:funcSymbolName];
+    
+    return [fetchedFunc eval:cons.cdr];
+    
+//    return [cons.car isKindOfClass:BLCons.class] ? nil : cons.car;
+}
+@end
+
 @implementation BLLambdaAtom
 
 +(id) symbolName {
@@ -198,6 +214,33 @@
 }
 @end
 
+@implementation BLLambdaCond 
+
++(id) symbolName {
+    return @"cond";
+}
+
+-(id) evalConditionResultPair:(BLCons*)conditionResultPair
+                othersToCheck:(BLCons*)othersToCheck {
+    
+    if (!conditionResultPair) {
+        return nil;
+    }
+    
+    BLCons *condition = conditionResultPair.car;
+    BLCons *resultToReturn = [[conditionResultPair cdr] car];
+    
+    return ([[BLLambdaEval new] eval:condition]
+            ? [[BLLambdaEval new] eval:resultToReturn]
+            : [self evalConditionResultPair:othersToCheck.car othersToCheck:othersToCheck.cdr]);
+}
+
+-(id) eval:(BLCons*)sexp {
+    return [self evalConditionResultPair:sexp.car
+                           othersToCheck:sexp.cdr];
+}
+@end
+
 @implementation BLLambdaEval
 
 +(id) symbolName {
@@ -236,7 +279,6 @@
     return [wasANum isEqual:[NSDecimalNumber notANumber]] ? atom : wasANum;
 }
 
-// This should be its own BLLambdaApply
 -(id) evalArgs:(BLCons*)cons {
     
     if (!cons) {
@@ -272,32 +314,5 @@
     }
     
     return [fetchedLambda eval:resultToEval];
-}
-@end
-
-@implementation BLLambdaCond 
-
-+(id) symbolName {
-    return @"cond";
-}
-
--(id) evalConditionResultPair:(BLCons*)conditionResultPair
-                othersToCheck:(BLCons*)othersToCheck {
-    
-    if (!conditionResultPair) {
-        return nil;
-    }
-    
-    BLCons *condition = conditionResultPair.car;
-    BLCons *resultToReturn = [[conditionResultPair cdr] car];
-    
-    return ([[BLLambdaEval new] eval:condition]
-            ? [[BLLambdaEval new] eval:resultToReturn]
-            : [self evalConditionResultPair:othersToCheck.car othersToCheck:othersToCheck.cdr]);
-}
-
--(id) eval:(BLCons*)sexp {
-    return [self evalConditionResultPair:sexp.car
-                           othersToCheck:sexp.cdr];
 }
 @end

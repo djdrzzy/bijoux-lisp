@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class BLSymbol;
+@protocol BLLambda;
 
 @interface BLSymbolTable : NSObject
 +(id) sharedInstance;
@@ -18,4 +19,5 @@
 -(void) ensureSymbolForValue:(id)value name:(NSString*)name;
 -(void) addSymbol:(BLSymbol*)symbol;
 -(BLSymbol*) symbolForName:(NSString*)name;
+-(id<BLLambda>) functionForName:(NSString*)name;
 @end

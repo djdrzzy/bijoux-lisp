@@ -25,6 +25,9 @@
 @interface BLLambdaEval : NSObject <BLLambda>
 @end
 
+@interface BLLambdaFuncall : NSObject <BLLambda>
+@end
+
 @interface BLLambdaAtom : NSObject <BLLambda>
 @end
 

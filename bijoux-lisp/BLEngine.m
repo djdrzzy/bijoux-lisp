@@ -28,7 +28,10 @@
     int righties = 0;
     for (NSUInteger i = 0; i < self.count; i++) {
 	id fetchedObject = [self objectAtIndex:i];
-	NSAssert(i == 0 ? [fetchedObject isEqualToString:@"("] : YES, @"Must start with an opening parenthesis");
+	
+	NSAssert((i == 0 
+		  ? [fetchedObject isEqualToString:@"("] 
+		  : YES), @"Tokens to read did not start with an opening parenthesis.");
 	
 	if ([fetchedObject isEqualToString:@"("]) {
 	    lefties++;
@@ -62,22 +65,15 @@
 }
 
 -(id) tokenize:(id)sexp {
-    // So we break up by whitespace and ( and )
-    
-    // First we see if any of those tokens include a '(' or a ')'. If it does
-    // then we break up after the '(' or before the ')'
     sexp = [sexp stringByReplacingOccurrencesOfString:@"(" 
                                            withString:@"( "];
     
     sexp = [sexp stringByReplacingOccurrencesOfString:@")" 
                                            withString:@" ) "];
     
-    
-    // then we seperate by whitespace
     NSMutableCharacterSet *characters = [[NSMutableCharacterSet alloc] init];
     
-    [characters formUnionWithCharacterSet:
-     [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    [characters formUnionWithCharacterSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     id brokenUp = [NSMutableArray arrayWithArray:
                    [sexp componentsSeparatedByCharactersInSet:characters]];
@@ -122,12 +118,9 @@
         return @"";
     }
     
-    // We only continue if we have a balanced amount of ( and )
-    // else we save what we have so far and wait for more input
-    // We return nil if we are waiting else we return the result
-    id tokens = [self tokenize:input];
+    id tokenizedInput = [self tokenize:input];
     
-    [_storedTokens addObjectsFromArray:tokens];
+    [_storedTokens addObjectsFromArray:tokenizedInput];
     
     id tokensToEval = nil;
     id result = nil;

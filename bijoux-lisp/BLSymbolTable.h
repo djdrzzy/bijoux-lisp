@@ -8,8 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class BLSymbol;
+
 @interface BLSymbolTable : NSObject
 +(id) sharedInstance;
--(id) valueForSymbol:(id)symbol;
--(void) setValue:(id)value forSymbol:(id)symbol;
+
+// If value is lambda it makes sure the symbol exists with that function. If it
+// is anything else it ensures that symbol is for that value.
+-(void) ensureSymbolForValue:(id)value name:(NSString*)name;
+-(void) addSymbol:(BLSymbol*)symbol;
+-(BLSymbol*) symbolForName:(NSString*)name;
 @end

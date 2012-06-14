@@ -9,11 +9,12 @@
 #import "BLLambda.h"
 
 #import "BLCons.h"
+#import "BLSymbol.h"
 #import "BLSymbolTable.h"
 
 @implementation BLLambdaAdd
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"+";
 }
 
@@ -31,7 +32,7 @@
 
 @implementation BLLambdaSubtract
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"-";
 }
 
@@ -50,7 +51,7 @@
 
 @implementation BLLambdaAtom
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"atom?";
 }
 
@@ -61,7 +62,7 @@
 
 @implementation BLLambdaQuote
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"quote";
 }
 
@@ -72,7 +73,7 @@
 
 @implementation BLLambdaCar
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"car";
 }
 
@@ -83,7 +84,7 @@
 
 @implementation BLLambdaCdr
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"cdr";
 }
 
@@ -94,7 +95,7 @@
 
 @implementation BLLambdaEqual
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"eq?";
 }
 
@@ -112,7 +113,7 @@
 
 @implementation BLLambdaCons
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"cons";
 }
 
@@ -163,13 +164,13 @@
     }
     
     
-    return [[[BLLambdaEval alloc] init] eval:bodyCopy];
+    return [[BLLambdaEval new] eval:bodyCopy];
 }
 @end
 
 @implementation BLLambdaLambda
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"lambda";
 }
 
@@ -180,24 +181,26 @@
 
 @implementation BLLambdaLabel 
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"label";
 }
 
 -(id) eval:(BLCons*)sexp {
     
     id label = sexp.car; // When we get symbols change this to one
-    id value = [[[BLLambdaEval alloc] init] eval:[[sexp cdr] car]];
+    id value = [[BLLambdaEval new] eval:[[sexp cdr] car]];
     
-    [[BLSymbolTable sharedInstance] setValue:value forSymbol:label];    
+    NSAssert([label isKindOfClass:NSString.class], @"Label must be an NSString");
     
+    [[BLSymbolTable sharedInstance] ensureSymbolForValue:value name:label];
+        
     return value;
 }
 @end
 
 @implementation BLLambdaEval
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"eval";
 }
 
@@ -220,7 +223,7 @@
     if ([atom isKindOfClass:NSDecimalNumber.class]) {
         return atom;
     } else if ([atom isKindOfClass:NSString.class]) {
-        id val = [[BLSymbolTable sharedInstance] valueForSymbol:atom];
+        id val =  [[BLSymbolTable sharedInstance] symbolForName:atom].value;
         if (val) {
             return val;
         }
@@ -233,6 +236,7 @@
     return [wasANum isEqual:[NSDecimalNumber notANumber]] ? atom : wasANum;
 }
 
+// This should be its own BLLambdaApply
 -(id) evalArgs:(BLCons*)cons {
     
     if (!cons) {
@@ -248,23 +252,17 @@
 
 -(id) evalFunc:(BLCons*)cons {
     
-    id key = nil;
-    if ([cons.car isKindOfClass:BLCons.class]) {
-        // attempt to eval it
-        key = [self eval:cons.car];
-    } else {
-        key = cons.car;
-    }
+    id key = [cons.car isKindOfClass:BLCons.class] ? [self eval:cons.car] : cons.car;
     
-    id<BLLambda> fetchedLambda = [key conformsToProtocol:@protocol(BLLambda)] ? key : [[BLSymbolTable sharedInstance] valueForSymbol:key];
+    id<BLLambda> fetchedLambda = [key conformsToProtocol:@protocol(BLLambda)] ? key : [[BLSymbolTable sharedInstance] symbolForName:key].value;
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     
     NSSet *setToNotEvalArgs = [NSSet setWithObjects:
-			       [BLLambdaQuote symbolLabel], 
-			       [BLLambdaLambda symbolLabel], 
-			       [BLLambdaLabel symbolLabel], 
-			       [BLLambdaCond symbolLabel], 
+			       [BLLambdaQuote symbolName], 
+			       [BLLambdaLambda symbolName], 
+			       [BLLambdaLabel symbolName], 
+			       [BLLambdaCond symbolName], 
 			       nil];
     
     id resultToEval = [setToNotEvalArgs containsObject:cons.car] ? cons.cdr : [self evalArgs:cons.cdr];
@@ -279,7 +277,7 @@
 
 @implementation BLLambdaCond 
 
-+(id) symbolLabel {
++(id) symbolName {
     return @"cond";
 }
 
@@ -293,8 +291,8 @@
     BLCons *condition = conditionResultPair.car;
     BLCons *resultToReturn = [[conditionResultPair cdr] car];
     
-    return ([[[BLLambdaEval alloc] init] eval:condition]
-            ? [[[BLLambdaEval alloc] init] eval:resultToReturn]
+    return ([[BLLambdaEval new] eval:condition]
+            ? [[BLLambdaEval new] eval:resultToReturn]
             : [self evalConditionResultPair:othersToCheck.car othersToCheck:othersToCheck.cdr]);
 }
 

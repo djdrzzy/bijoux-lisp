@@ -11,7 +11,7 @@
 
 @protocol BLLambda <NSObject>
 @required
-+(id) symbolLabel;
++(id) symbolName;
 -(id) eval:(id)form;
 @end
 

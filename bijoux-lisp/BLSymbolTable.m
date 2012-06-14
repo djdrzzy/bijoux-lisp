@@ -9,6 +9,7 @@
 #import "BLSymbolTable.h"
 
 #import "BLLambda.h"
+#import "BLSymbol.h"
 
 @implementation BLSymbolTable {
     NSMutableDictionary *_symbolLookup;
@@ -57,17 +58,28 @@
     NSAssert([lambdaObj conformsToProtocol:@protocol(BLLambda)],
 	     @"Should conform to the BLLambda protocol...");
     
-    id symbolLabel = [class symbolLabel];
+    id symbolName = [class symbolName];
+
+    [self ensureSymbolForValue:lambdaObj name:symbolName];
+}
+
+-(void) ensureSymbolForValue:(id)value name:(NSString*)name {
+    BLSymbol *symbolToAdd = [_symbolLookup valueForKey:name];
+    symbolToAdd = symbolToAdd ?: ([_symbolLookup setValue:[BLSymbol new] forKey:name], [_symbolLookup valueForKey:name]);
     
-    [_symbolLookup setValue:lambdaObj forKey:symbolLabel];
+    if ([value conformsToProtocol:@protocol(BLLambda)]) {
+	symbolToAdd.value = value; // TODO: Should be function? See comments in BLSymbol...
+    } else {
+	symbolToAdd.value = value;
+    }
 }
 
--(id) valueForSymbol:(id)symbol {
-    return [_symbolLookup valueForKey:symbol];
+-(void) addSymbol:(BLSymbol*)symbol {
+    [_symbolLookup setValue:symbol forKey:symbol.name];
 }
 
--(void) setValue:(id)value forSymbol:(id)symbol {
-    [_symbolLookup setValue:value forKey:symbol];
+-(BLSymbol*) symbolForName:(NSString*)name {
+    return [_symbolLookup valueForKey:name];
 }
 
 @end

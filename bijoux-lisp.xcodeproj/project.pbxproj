@@ -23,6 +23,7 @@
 		15BF851515885030008EE49E /* Pass-To-Bijoux.workflow in Resources */ = {isa = PBXBuildFile; fileRef = 15BF851415885030008EE49E /* Pass-To-Bijoux.workflow */; };
 		15BF851715885047008EE49E /* README in Resources */ = {isa = PBXBuildFile; fileRef = 15BF851615885047008EE49E /* README */; };
 		15BF851A15885352008EE49E /* BLSymbolTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BF851915885352008EE49E /* BLSymbolTable.m */; };
+		15BF851D1589A271008EE49E /* BLSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BF851C1589A271008EE49E /* BLSymbol.m */; };
 		15D782E8157D6D1500E204BC /* BLLambda.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D782E7157D6D1500E204BC /* BLLambda.m */; };
 /* End PBXBuildFile section */
 
@@ -75,6 +76,8 @@
 		15BF851615885047008EE49E /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		15BF851815885352008EE49E /* BLSymbolTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLSymbolTable.h; sourceTree = "<group>"; };
 		15BF851915885352008EE49E /* BLSymbolTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLSymbolTable.m; sourceTree = "<group>"; };
+		15BF851B1589A271008EE49E /* BLSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLSymbol.h; sourceTree = "<group>"; };
+		15BF851C1589A271008EE49E /* BLSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLSymbol.m; sourceTree = "<group>"; };
 		15D782E6157D6D1500E204BC /* BLLambda.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLLambda.h; sourceTree = "<group>"; };
 		15D782E7157D6D1500E204BC /* BLLambda.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLLambda.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -137,6 +140,8 @@
 				158A1B331484AC8E009A5CA4 /* BLEngine.m */,
 				15D782E6157D6D1500E204BC /* BLLambda.h */,
 				15D782E7157D6D1500E204BC /* BLLambda.m */,
+				15BF851B1589A271008EE49E /* BLSymbol.h */,
+				15BF851C1589A271008EE49E /* BLSymbol.m */,
 				15BF851815885352008EE49E /* BLSymbolTable.h */,
 				15BF851915885352008EE49E /* BLSymbolTable.m */,
 				158A1B091484A2DC009A5CA4 /* BLViewController.h */,
@@ -281,6 +286,7 @@
 				158A1B371484AEC7009A5CA4 /* BLCons.m in Sources */,
 				15D782E8157D6D1500E204BC /* BLLambda.m in Sources */,
 				15BF851A15885352008EE49E /* BLSymbolTable.m in Sources */,
+				15BF851D1589A271008EE49E /* BLSymbol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

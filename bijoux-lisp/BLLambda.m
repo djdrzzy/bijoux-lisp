@@ -104,7 +104,7 @@
 @implementation BLLambdaAtom
 
 +(id) symbolName {
-    return @"atom?";
+    return @"atom";
 }
 
 -(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
@@ -180,15 +180,17 @@
 
 @end
 
-@interface BLLambdaLambdaLambda : BLLambdaLambda 
+@interface BLLambdaClosure : BLLambdaLambda 
 -(id) initWithArgs:(BLCons*)args body:(BLCons*)body;
 @end
 
-@implementation BLLambdaLambdaLambda {
+@implementation BLLambdaClosure {
     BLCons *_args;
     BLCons *_body;
 }
 
+// We will also later put the environment that we created this in. This is where
+// we 'close' around those.
 -(id) initWithArgs:(BLCons*)args body:(BLCons*)body {
     self = [super init];
     
@@ -227,14 +229,14 @@
 }
 
 -(id) eval:(id)sexp withEnvironment:(BLEnvironment *)environment {
-    return [[BLLambdaLambdaLambda alloc] initWithArgs:[sexp car] body:[sexp cdr]];
+    return [[BLLambdaClosure alloc] initWithArgs:[sexp car] body:[sexp cdr]];
 }
 @end
 
 @implementation BLLambdaLabel 
 
 +(id) symbolName {
-    return @"label";
+    return @"defparameter";
 }
 
 -(id) eval:(BLCons*)sexp withEnvironment:(BLEnvironment*)environment {
@@ -291,14 +293,14 @@
     }
     
     return ([sexp isKindOfClass:BLCons.class]
-            ? [[BLLambdaFuncall new] eval:sexp withEnvironment:environment]//   [self evalFunc:sexp withEnvironment:(BLEnvironment*)environment]
+            ? [[BLLambdaFuncall new] eval:sexp withEnvironment:environment]
             : [self evalAtom:sexp withEnvironment:environment]);
     
 }
 
 -(id) evalAtom:(id)atom withEnvironment:(BLEnvironment*)environment {
     NSAssert([atom isKindOfClass:NSString.class]
-             || [atom isKindOfClass:BLLambdaLambdaLambda.class]
+             || [atom isKindOfClass:BLLambdaClosure.class]
              || [atom isKindOfClass:NSDecimalNumber.class], 
 	     @"Atom must be an NSString, NSDecimalNumber or lambda for now.");
     

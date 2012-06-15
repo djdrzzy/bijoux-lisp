@@ -10,6 +10,9 @@
 
 @class BLSymbolTable;
 
+
+// Eventually you will be able to have sub-environments and parent environments
+// that allow us to look up the environments with lexical scoping.
 @interface BLEnvironment : NSObject
 @property (nonatomic, readwrite, strong) BLSymbolTable *symbolTable;
 @end

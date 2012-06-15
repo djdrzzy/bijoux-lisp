@@ -51,6 +51,63 @@
 }
 @end
 
+@implementation BLLambdaApply
+
++(id) symbolName {
+    return @"apply";
+}
+
+// Weirdly this works here but not in SBCL. I don't know why it is bad to have
+// so it is kept in... (apply (quote +) (quote (5 5 5 5 (6 6))))
+-(id) evalArgs:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
+    
+    if (!cons) {
+        return nil;
+    }
+    
+    id first = [cons car];
+    id rest = [cons cdr];
+    
+    if (!rest) {
+	if ([first isKindOfClass:BLCons.class]) {
+	    rest =  [first cdr];
+	    first = [first car];
+	}	
+    }
+    
+    return [[BLCons alloc] initWithCar:[[BLLambdaEval new] eval:first withEnvironment:environment] 
+                                   cdr:[self evalArgs:rest withEnvironment:environment]];
+}
+
+-(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
+    id key = ([cons.car isKindOfClass:BLCons.class] 
+	      ? [self eval:cons.car withEnvironment:environment] 
+	      : cons.car);
+    
+    id<BLLambda> fetchedLambda = ([key conformsToProtocol:@protocol(BLLambda)] 
+				  ? key 
+				  : [environment.symbolTable symbolForName:key].value);
+    
+    NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
+    
+    NSSet *setToNotEvalArgs = [NSSet setWithObjects:
+			       [BLLambdaQuote symbolName], 
+			       [BLLambdaLambda symbolName], 
+			       [BLLambdaLabel symbolName], 
+			       [BLLambdaCond symbolName], 
+			       nil];
+    
+    id resultToEval = ([setToNotEvalArgs containsObject:cons.car] 
+		       ? cons.cdr 
+		       : [self evalArgs:cons.cdr withEnvironment:environment]);
+    
+    if ([fetchedLambda isKindOfClass:BLLambdaEval.class]) {
+        return [self eval:[resultToEval car] withEnvironment:environment];
+    }
+    
+    return [fetchedLambda eval:resultToEval withEnvironment:environment];
+}
+@end
 
 @implementation BLLambdaFuncall
 
@@ -97,6 +154,7 @@
         return [self eval:[resultToEval car] withEnvironment:environment];
     }
     
+    // I should apply this at this point...?
     return [fetchedLambda eval:resultToEval withEnvironment:environment];
 }
 @end
@@ -108,7 +166,7 @@
 }
 
 -(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
-    return [cons.car isKindOfClass:BLCons.class] ? nil : cons.car;
+    return [cons isKindOfClass:BLCons.class] ? nil : cons;
 }
 @end
 

@@ -35,6 +35,7 @@
 						BLLambdaLambda.class,
 						BLLambdaLabel.class,
 						BLLambdaCond.class,
+						BLLambdaApply.class,
 						nil];
 	
 	for (Class lambdaClass in arrayOfInitialLambdaClasses) {

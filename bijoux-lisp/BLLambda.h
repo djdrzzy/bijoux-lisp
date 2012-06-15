@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class BLEnvironment;
 
 @protocol BLLambda <NSObject>
 @required
 +(id) symbolName;
--(id) eval:(id)form;
+-(id) eval:(id)form withEnvironment:(BLEnvironment*)environment;
 @end
 
 

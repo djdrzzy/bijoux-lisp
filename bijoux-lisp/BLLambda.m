@@ -18,13 +18,14 @@
     return @"+";
 }
 
--(id) eval:(BLCons*)cons {
+-(id) eval:(BLCons*)cons withEnvironment:(id)environment {
     if (!cons) {
         return [NSDecimalNumber numberWithDouble:0.0];
     }
     
     NSDecimalNumber *firstVal = cons.car;
-    NSDecimalNumber *secondVal = [[BLLambdaAdd new] eval:cons.cdr];
+    NSDecimalNumber *secondVal = [[BLLambdaAdd new] eval:cons.cdr 
+					 withEnvironment:environment];
     
     return [firstVal decimalNumberByAdding:secondVal];
 }
@@ -36,13 +37,14 @@
     return @"-";
 }
 
--(id) eval:(BLCons*)cons {
+-(id) eval:(BLCons*)cons withEnvironment:(id)environment{
     if (!cons) {
         return [NSDecimalNumber numberWithDouble:0.0];
     }
     
     NSDecimalNumber *firstVal = cons.car;
-    NSDecimalNumber *secondVal = [[BLLambdaAdd new] eval:cons.cdr];
+    NSDecimalNumber *secondVal = [[BLLambdaAdd new] eval:cons.cdr 
+					 withEnvironment:environment];
     
     return [firstVal decimalNumberBySubtracting:secondVal];
 }
@@ -55,13 +57,11 @@
     return @"funcall";
 }
 
--(id) eval:(BLCons*)cons {
+-(id) eval:(BLCons*)cons withEnvironment:(id)environment {
     id funcSymbolName = cons.car;
     id<BLLambda> fetchedFunc = [[BLSymbolTable sharedInstance] functionForName:funcSymbolName];
     
-    return [fetchedFunc eval:cons.cdr];
-    
-//    return [cons.car isKindOfClass:BLCons.class] ? nil : cons.car;
+    return [fetchedFunc eval:cons.cdr withEnvironment:environment];    
 }
 @end
 
@@ -71,7 +71,7 @@
     return @"atom?";
 }
 
--(id) eval:(BLCons*)cons {
+-(id) eval:(BLCons*)cons withEnvironment:(id)environment {
     return [cons.car isKindOfClass:BLCons.class] ? nil : cons.car;
 }
 @end
@@ -82,7 +82,7 @@
     return @"quote";
 }
 
--(id) eval:(BLCons*)cons {
+-(id) eval:(BLCons*)cons withEnvironment:(id)environment {
     return [cons car];
 }
 @end
@@ -93,7 +93,7 @@
     return @"car";
 }
 
--(id) eval:(BLCons*)cons {
+-(id) eval:(BLCons*)cons withEnvironment:(id)environment {
     return [[cons car] car];
 }
 @end
@@ -104,7 +104,7 @@
     return @"cdr";
 }
 
--(id) eval:(BLCons*)cons {
+-(id) eval:(BLCons*)cons withEnvironment:(id)environment {
     return [[cons car] cdr];
 }
 @end
@@ -115,7 +115,7 @@
     return @"eq?";
 }
 
--(id) eval:(BLCons*)cons {
+-(id) eval:(BLCons*)cons withEnvironment:(id)environment {
     if (!cons) {
         return [NSNumber numberWithBool:YES];
     }
@@ -133,7 +133,7 @@
     return @"cons";
 }
 
--(id) eval:(BLCons*)cons {
+-(id) eval:(BLCons*)cons withEnvironment:(id)environment {
     id first = cons.car;
     id second = [cons.cdr car];
     
@@ -164,7 +164,7 @@
     return self;
 }
 
--(id) eval:(BLCons*)sexp {
+-(id) eval:(BLCons*)sexp withEnvironment:(id)environment {
     
     BLCons *argsCopy = [_args copy];
     BLCons *bodyCopy = [_body.car copy];
@@ -180,7 +180,7 @@
     }
     
     
-    return [[BLLambdaEval new] eval:bodyCopy];
+    return [[BLLambdaEval new] eval:bodyCopy withEnvironment:environment];
 }
 @end
 
@@ -190,7 +190,7 @@
     return @"lambda";
 }
 
--(id) eval:(id)sexp {
+-(id) eval:(id)sexp withEnvironment:(BLEnvironment *)environment {
     return [[BLLambdaLambdaLambda alloc] initWithArgs:[sexp car] body:[sexp cdr]];
 }
 @end
@@ -201,10 +201,10 @@
     return @"label";
 }
 
--(id) eval:(BLCons*)sexp {
+-(id) eval:(BLCons*)sexp withEnvironment:(id)environment {
     
     id label = sexp.car; // When we get symbols change this to one
-    id value = [[BLLambdaEval new] eval:[[sexp cdr] car]];
+    id value = [[BLLambdaEval new] eval:[[sexp cdr] car] withEnvironment:environment];
     
     NSAssert([label isKindOfClass:NSString.class], @"Label must be an NSString");
     
@@ -221,7 +221,8 @@
 }
 
 -(id) evalConditionResultPair:(BLCons*)conditionResultPair
-                othersToCheck:(BLCons*)othersToCheck {
+                othersToCheck:(BLCons*)othersToCheck
+	      withEnvironment:(BLEnvironment*)environment{
     
     if (!conditionResultPair) {
         return nil;
@@ -230,14 +231,15 @@
     BLCons *condition = conditionResultPair.car;
     BLCons *resultToReturn = [[conditionResultPair cdr] car];
     
-    return ([[BLLambdaEval new] eval:condition]
-            ? [[BLLambdaEval new] eval:resultToReturn]
-            : [self evalConditionResultPair:othersToCheck.car othersToCheck:othersToCheck.cdr]);
+    return ([[BLLambdaEval new] eval:condition withEnvironment:environment]
+            ? [[BLLambdaEval new] eval:resultToReturn withEnvironment:environment]
+            : [self evalConditionResultPair:othersToCheck.car othersToCheck:othersToCheck.cdr withEnvironment:environment]);
 }
 
--(id) eval:(BLCons*)sexp {
+-(id) eval:(BLCons*)sexp withEnvironment:(id)environment {
     return [self evalConditionResultPair:sexp.car
-                           othersToCheck:sexp.cdr];
+                           othersToCheck:sexp.cdr
+			 withEnvironment:environment];
 }
 @end
 
@@ -247,21 +249,22 @@
     return @"eval";
 }
 
--(id) eval:(id)sexp {
+-(id) eval:(id)sexp withEnvironment:(id)environment {
     if (!sexp) {
         return nil;
     }
     
     return ([sexp isKindOfClass:BLCons.class]
-            ? [self evalFunc:sexp]
-            : [self evalAtom:sexp]);
+            ? [self evalFunc:sexp withEnvironment:(BLEnvironment*)environment]
+            : [self evalAtom:sexp withEnvironment:(BLEnvironment*)environment]);
     
 }
 
--(id) evalAtom:(id)atom {
+-(id) evalAtom:(id)atom withEnvironment:(BLEnvironment*)environment {
     NSAssert([atom isKindOfClass:NSString.class]
              || [atom isKindOfClass:BLLambdaLambdaLambda.class]
-             || [atom isKindOfClass:NSDecimalNumber.class], @"Atom must be an NSString, NSDecimalNumber or lambda for now.");
+             || [atom isKindOfClass:NSDecimalNumber.class], 
+	     @"Atom must be an NSString, NSDecimalNumber or lambda for now.");
     
     if ([atom isKindOfClass:NSDecimalNumber.class]) {
         return atom;
@@ -279,7 +282,7 @@
     return [wasANum isEqual:[NSDecimalNumber notANumber]] ? atom : wasANum;
 }
 
--(id) evalArgs:(BLCons*)cons {
+-(id) evalArgs:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
     
     if (!cons) {
         return nil;
@@ -288,15 +291,19 @@
     id first = [cons car];
     id rest = [cons cdr];
     
-    return [[BLCons alloc] initWithCar:[self eval:first] 
-                                   cdr:[self evalArgs:rest]];
+    return [[BLCons alloc] initWithCar:[self eval:first withEnvironment:environment] 
+                                   cdr:[self evalArgs:rest withEnvironment:environment]];
 }
 
--(id) evalFunc:(BLCons*)cons {
+-(id) evalFunc:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
     
-    id key = [cons.car isKindOfClass:BLCons.class] ? [self eval:cons.car] : cons.car;
+    id key = ([cons.car isKindOfClass:BLCons.class] 
+	      ? [self eval:cons.car withEnvironment:environment] 
+	      : cons.car);
     
-    id<BLLambda> fetchedLambda = [key conformsToProtocol:@protocol(BLLambda)] ? key : [[BLSymbolTable sharedInstance] symbolForName:key].value;
+    id<BLLambda> fetchedLambda = ([key conformsToProtocol:@protocol(BLLambda)] 
+				  ? key 
+				  : [[BLSymbolTable sharedInstance] symbolForName:key].value);
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     
@@ -307,12 +314,14 @@
 			       [BLLambdaCond symbolName], 
 			       nil];
     
-    id resultToEval = [setToNotEvalArgs containsObject:cons.car] ? cons.cdr : [self evalArgs:cons.cdr];
+    id resultToEval = ([setToNotEvalArgs containsObject:cons.car] 
+		       ? cons.cdr 
+		       : [self evalArgs:cons.cdr withEnvironment:environment]);
     
     if ([fetchedLambda isKindOfClass:BLLambdaEval.class]) {
-        return [self eval:[resultToEval car]];
+        return [self eval:[resultToEval car] withEnvironment:environment];
     }
     
-    return [fetchedLambda eval:resultToEval];
+    return [fetchedLambda eval:resultToEval withEnvironment:environment];
 }
 @end

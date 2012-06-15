@@ -25,6 +25,7 @@
 		15BF851A15885352008EE49E /* BLSymbolTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BF851915885352008EE49E /* BLSymbolTable.m */; };
 		15BF851D1589A271008EE49E /* BLSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BF851C1589A271008EE49E /* BLSymbol.m */; };
 		15D782E8157D6D1500E204BC /* BLLambda.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D782E7157D6D1500E204BC /* BLLambda.m */; };
+		15EA79CF158ADF8D00DA326C /* BLEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = 15EA79CE158ADF8D00DA326C /* BLEnvironment.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,8 @@
 		15BF851C1589A271008EE49E /* BLSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLSymbol.m; sourceTree = "<group>"; };
 		15D782E6157D6D1500E204BC /* BLLambda.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLLambda.h; sourceTree = "<group>"; };
 		15D782E7157D6D1500E204BC /* BLLambda.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLLambda.m; sourceTree = "<group>"; };
+		15EA79CD158ADF8D00DA326C /* BLEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEnvironment.h; sourceTree = "<group>"; };
+		15EA79CE158ADF8D00DA326C /* BLEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEnvironment.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +141,8 @@
 				158A1B361484AEC7009A5CA4 /* BLCons.m */,
 				158A1B321484AC8E009A5CA4 /* BLEngine.h */,
 				158A1B331484AC8E009A5CA4 /* BLEngine.m */,
+				15EA79CD158ADF8D00DA326C /* BLEnvironment.h */,
+				15EA79CE158ADF8D00DA326C /* BLEnvironment.m */,
 				15D782E6157D6D1500E204BC /* BLLambda.h */,
 				15D782E7157D6D1500E204BC /* BLLambda.m */,
 				15BF851B1589A271008EE49E /* BLSymbol.h */,
@@ -287,6 +292,7 @@
 				15D782E8157D6D1500E204BC /* BLLambda.m in Sources */,
 				15BF851A15885352008EE49E /* BLSymbolTable.m in Sources */,
 				15BF851D1589A271008EE49E /* BLSymbol.m in Sources */,
+				15EA79CF158ADF8D00DA326C /* BLEnvironment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

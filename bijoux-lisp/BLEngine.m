@@ -9,6 +9,7 @@
 #import "BLEngine.h"
 
 #import "BLCons.h"
+#import "BLEnvironment.h"
 #import "BLLambda.h"
 
 @interface NSMutableArray (BLAdditions)
@@ -52,6 +53,8 @@
 @end
 
 @implementation BLEngine {
+    BLEnvironment *_environment;
+    
     NSMutableArray *_storedTokens;
 }
 
@@ -59,7 +62,8 @@
 {
     self = [super init];
     if (self) {
-        _storedTokens = [[NSMutableArray alloc] init];
+        _storedTokens = [NSMutableArray new];
+	_environment = [BLEnvironment new];
     }
     return self;
 }
@@ -127,7 +131,7 @@
     
     while ((tokensToEval = [_storedTokens cutFirstBalancedExpression])) {
 	BLCons *formToEval = [self read:tokensToEval];
-	result = [[[BLLambdaEval alloc] init] eval:formToEval];
+	result = [[[BLLambdaEval alloc] init] eval:formToEval withEnvironment:_environment];
     }
     
     return result;

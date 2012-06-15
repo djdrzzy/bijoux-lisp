@@ -9,6 +9,7 @@
 #import "BLLambda.h"
 
 #import "BLCons.h"
+#import "BLEnvironment.h"
 #import "BLSymbol.h"
 #import "BLSymbolTable.h"
 
@@ -18,7 +19,7 @@
     return @"+";
 }
 
--(id) eval:(BLCons*)cons withEnvironment:(id)environment {
+-(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
     if (!cons) {
         return [NSDecimalNumber numberWithDouble:0.0];
     }
@@ -37,7 +38,7 @@
     return @"-";
 }
 
--(id) eval:(BLCons*)cons withEnvironment:(id)environment{
+-(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
     if (!cons) {
         return [NSDecimalNumber numberWithDouble:0.0];
     }
@@ -57,9 +58,12 @@
     return @"funcall";
 }
 
--(id) eval:(BLCons*)cons withEnvironment:(id)environment {
-    id funcSymbolName = cons.car;
-    id<BLLambda> fetchedFunc = [[BLSymbolTable sharedInstance] functionForName:funcSymbolName];
+-(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
+    id potentialFunc = cons.car;
+    
+    id<BLLambda> fetchedFunc = ([potentialFunc conformsToProtocol:@protocol(BLLambda)] 
+				? potentialFunc 
+				: [environment.symbolTable functionForName:potentialFunc]);
     
     return [fetchedFunc eval:cons.cdr withEnvironment:environment];    
 }
@@ -71,7 +75,7 @@
     return @"atom?";
 }
 
--(id) eval:(BLCons*)cons withEnvironment:(id)environment {
+-(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
     return [cons.car isKindOfClass:BLCons.class] ? nil : cons.car;
 }
 @end
@@ -82,7 +86,7 @@
     return @"quote";
 }
 
--(id) eval:(BLCons*)cons withEnvironment:(id)environment {
+-(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
     return [cons car];
 }
 @end
@@ -93,7 +97,7 @@
     return @"car";
 }
 
--(id) eval:(BLCons*)cons withEnvironment:(id)environment {
+-(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
     return [[cons car] car];
 }
 @end
@@ -104,7 +108,7 @@
     return @"cdr";
 }
 
--(id) eval:(BLCons*)cons withEnvironment:(id)environment {
+-(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
     return [[cons car] cdr];
 }
 @end
@@ -115,7 +119,7 @@
     return @"eq?";
 }
 
--(id) eval:(BLCons*)cons withEnvironment:(id)environment {
+-(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
     if (!cons) {
         return [NSNumber numberWithBool:YES];
     }
@@ -133,7 +137,7 @@
     return @"cons";
 }
 
--(id) eval:(BLCons*)cons withEnvironment:(id)environment {
+-(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
     id first = cons.car;
     id second = [cons.cdr car];
     
@@ -164,7 +168,7 @@
     return self;
 }
 
--(id) eval:(BLCons*)sexp withEnvironment:(id)environment {
+-(id) eval:(BLCons*)sexp withEnvironment:(BLEnvironment*)environment {
     
     BLCons *argsCopy = [_args copy];
     BLCons *bodyCopy = [_body.car copy];
@@ -201,14 +205,14 @@
     return @"label";
 }
 
--(id) eval:(BLCons*)sexp withEnvironment:(id)environment {
+-(id) eval:(BLCons*)sexp withEnvironment:(BLEnvironment*)environment {
     
     id label = sexp.car; // When we get symbols change this to one
     id value = [[BLLambdaEval new] eval:[[sexp cdr] car] withEnvironment:environment];
     
     NSAssert([label isKindOfClass:NSString.class], @"Label must be an NSString");
     
-    [[BLSymbolTable sharedInstance] ensureSymbolForValue:value name:label];
+    [environment.symbolTable ensureSymbolForValue:value name:label];
         
     return value;
 }
@@ -236,7 +240,7 @@
             : [self evalConditionResultPair:othersToCheck.car othersToCheck:othersToCheck.cdr withEnvironment:environment]);
 }
 
--(id) eval:(BLCons*)sexp withEnvironment:(id)environment {
+-(id) eval:(BLCons*)sexp withEnvironment:(BLEnvironment*)environment {
     return [self evalConditionResultPair:sexp.car
                            othersToCheck:sexp.cdr
 			 withEnvironment:environment];
@@ -249,7 +253,7 @@
     return @"eval";
 }
 
--(id) eval:(id)sexp withEnvironment:(id)environment {
+-(id) eval:(id)sexp withEnvironment:(BLEnvironment*)environment {
     if (!sexp) {
         return nil;
     }
@@ -269,7 +273,7 @@
     if ([atom isKindOfClass:NSDecimalNumber.class]) {
         return atom;
     } else if ([atom isKindOfClass:NSString.class]) {
-        id val =  [[BLSymbolTable sharedInstance] symbolForName:atom].value;
+        id val =  [environment.symbolTable symbolForName:atom].value;
         if (val) {
             return val;
         }
@@ -303,7 +307,7 @@
     
     id<BLLambda> fetchedLambda = ([key conformsToProtocol:@protocol(BLLambda)] 
 				  ? key 
-				  : [[BLSymbolTable sharedInstance] symbolForName:key].value);
+				  : [environment.symbolTable symbolForName:key].value);
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     

@@ -11,5 +11,5 @@
 @class BLSymbolTable;
 
 @interface BLEnvironment : NSObject
-@property (nonatomic, readwrite) BLSymbolTable *symbolTable;
+@property (nonatomic, readwrite, strong) BLSymbolTable *symbolTable;
 @end

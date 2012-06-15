@@ -14,14 +14,6 @@
 @implementation BLSymbolTable {
     NSMutableDictionary *_symbolLookup;
 }
-+(id) sharedInstance {
-    static id shared = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-	shared = [[BLSymbolTable alloc] init];
-    });
-    return shared;
-}
 
 - (id)init
 {

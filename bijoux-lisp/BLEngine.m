@@ -11,6 +11,7 @@
 #import "BLCons.h"
 #import "BLEnvironment.h"
 #import "BLLambda.h"
+#import "BLSymbolTable.h"
 
 @interface NSMutableArray (BLAdditions)
 -(id) nextToken;
@@ -64,6 +65,8 @@
     if (self) {
         _storedTokens = [NSMutableArray new];
 	_environment = [BLEnvironment new];
+	
+	_environment.symbolTable = [BLSymbolTable new];
     }
     return self;
 }

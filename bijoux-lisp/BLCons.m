@@ -8,6 +8,8 @@
 
 #import "BLCons.h"
 
+#import "BLSymbol.h"
+
 @implementation BLCons
 @synthesize car, cdr;
 -(id) initWithCar:(id)newCar cdr:(id)newCdr {
@@ -30,19 +32,19 @@
 				   cdr:[self.cdr copy]];
 }
 
--(void) replaceAtomsMatching:(id)match withReplacement:(id)replacement {
+-(void) replaceSymbolsMatching:(BLSymbol*)match withReplacement:(id)replacement {
     if ([self.car isKindOfClass:BLCons.class]) {
-	[self.car replaceAtomsMatching:match withReplacement:replacement];
+	[self.car replaceSymbolsMatching:match withReplacement:replacement];
     } else {
-	if ([self.car isEqual:match]) {
+	if ([self.car isEqualToSymbol:match]) {
 	    self.car = replacement;
 	}
     }
     
     if ([self.cdr isKindOfClass:BLCons.class]) {
-	[self.cdr replaceAtomsMatching:match withReplacement:replacement];
+	[self.cdr replaceSymbolsMatching:match withReplacement:replacement];
     } else {
-	if ([self.cdr isEqual:match]) {
+	if ([self.cdr isEqualToSymbol:match]) {
 	    self.cdr = replacement;
 	}
     }

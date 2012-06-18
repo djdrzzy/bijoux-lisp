@@ -46,7 +46,7 @@
     
     [_reader read:input];
     
-    return _parsingReturnValue;
+    return _parsingReturnValue ?: @"";
 }
 
 -(void) reader:(BLReader*)reader didReadNewForm:(BLCons*)form {

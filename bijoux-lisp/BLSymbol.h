@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 // From: http://en.wikipedia.org/wiki/Common_Lisp
-@interface BLSymbol : NSObject
+@interface BLSymbol : NSObject <NSCopying>
 @property (copy) id name;
 @property (strong) id value;
 @property (strong) id function; // Unused till...
@@ -28,4 +28,7 @@
 
 // Maybe we will make a precedence choice later where if there is not a function
 // on that symbol we will check if there is a lambda...
+
+-(id) initWithName:(NSString*)name;
+-(BOOL) isEqualToSymbol:(BLSymbol*)symbol;
 @end

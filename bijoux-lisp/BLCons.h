@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+#import "BLSymbol.h"
+
 @interface BLCons : NSObject <NSCopying>
 @property (strong, nonatomic) id car;
 @property (strong, nonatomic) id cdr;
 -(id) initWithCar:(id)car cdr:(id)cdr;
--(void) replaceAtomsMatching:(id)match withReplacement:(id)replacement;
+-(void) replaceSymbolsMatching:(BLSymbol*)match withReplacement:(id)replacement;
 -(void) addToEnd:(id)obj;
 @end

@@ -81,5 +81,11 @@
     return symbol.value;
 }
 
+-(id<BLLambda>) functionForSymbol:(BLSymbol*)symbol {
+    return [self functionForName:symbol.name];
+}
+-(id) valueForSymbol:(BLSymbol*)symbol {
+    return [self symbolForName:symbol.name].value;
+}
 
 @end

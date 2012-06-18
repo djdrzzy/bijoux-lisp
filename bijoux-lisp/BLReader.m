@@ -9,6 +9,7 @@
 #import "BLReader.h"
 
 #import "BLCons.h"
+#import "BLSymbol.h"
 
 @interface NSMutableArray (BLAdditions)
 -(id) nextToken;
@@ -73,6 +74,7 @@
     NSMutableCharacterSet *characters = [[NSMutableCharacterSet alloc] init];
     
     [characters formUnionWithCharacterSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    //[characters addCharactersInString:@"\""]; TODO: Parse strings
     
     id brokenUp = [NSMutableArray arrayWithArray:
                    [sexp componentsSeparatedByCharactersInSet:characters]];
@@ -94,7 +96,27 @@
         return [[BLCons alloc] initWithCar:first 
                                        cdr:second];
     } else {
-        id first = token;
+	id first = nil;
+	
+	// TODO: Make a converter class for number, string, symbol etc... also handling of "nil" and "t" and any other special symbols...
+	
+	NSCharacterSet *numSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789."];
+	BOOL validNum = [[token stringByTrimmingCharactersInSet:numSet] isEqualToString:@""];
+
+	if (validNum) {
+	    first = [[NSDecimalNumber alloc] initWithString:token];
+	} else {
+	    // We try to make a symbol instead...
+	    BLSymbol *newSymbol = [[BLSymbol alloc] initWithName:token];
+	    first = newSymbol;
+	}
+	
+	NSAssert(first, @"'first' must have a value");
+	
+	// TODO maybe... Treat numbers more like this: http://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node189.html
+	// Right now it is if it can be treated as an NSDecimalNumber
+	
+
         id second = [self readTail:tokens];
         
         return [[BLCons alloc] initWithCar:first 

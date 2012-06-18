@@ -13,6 +13,49 @@
 #import "BLSymbol.h"
 #import "BLSymbolTable.h"
 
+@interface BLLambdaClosure : BLLambdaLambda 
+-(id) initWithArgs:(BLCons*)args body:(BLCons*)body;
+@end
+
+@implementation BLLambdaClosure {
+    BLCons *_args;
+    BLCons *_body;
+}
+
+// We will also later put the environment that we created this in. This is where
+// we 'close' around those.
+-(id) initWithArgs:(BLCons*)args body:(BLCons*)body {
+    self = [super init];
+    
+    if (self) {
+        _args = args;
+        _body = body;
+    }
+    
+    return self;
+}
+
+-(id) eval:(BLCons*)sexp withEnvironment:(BLEnvironment*)environment {
+    
+    BLCons *argsCopy = [_args copy];
+    BLCons *bodyCopy = [_body.car copy];
+    
+    while (argsCopy) {
+        id argsHead = argsCopy.car;
+        id sexpHead = sexp.car;
+        
+        argsCopy = argsCopy.cdr;
+        sexp = sexp.cdr;
+        
+        [bodyCopy replaceSymbolsMatching:argsHead withReplacement:sexpHead];
+    }
+    
+    
+    return [[BLLambdaEval new] eval:bodyCopy withEnvironment:environment];
+}
+@end
+
+
 @implementation BLLambdaAdd
 
 +(id) symbolName {
@@ -139,7 +182,7 @@
     
     id<BLLambda> fetchedLambda = ([key conformsToProtocol:@protocol(BLLambda)] 
 				  ? key 
-				  : [environment.symbolTable symbolForName:key].value);
+				  : [environment.symbolTable functionForSymbol:key]);
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     
@@ -150,7 +193,7 @@
 			       [BLLambdaCond symbolName], 
 			       nil];
     
-    id resultToEval = ([setToNotEvalArgs containsObject:cons.car] 
+    id resultToEval = ([fetchedLambda isKindOfClass:BLLambdaClosure.class] || [setToNotEvalArgs containsObject:[cons.car name]] 
 		       ? cons.cdr 
 		       : [self evalArgs:cons.cdr withEnvironment:environment]);
     
@@ -172,7 +215,7 @@
 }
 
 -(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
-    return [cons isKindOfClass:BLCons.class] ? nil : cons;
+    return [cons.car isKindOfClass:BLCons.class] ? nil : cons.car;
 }
 @end
 
@@ -244,48 +287,6 @@
 
 @end
 
-@interface BLLambdaClosure : BLLambdaLambda 
--(id) initWithArgs:(BLCons*)args body:(BLCons*)body;
-@end
-
-@implementation BLLambdaClosure {
-    BLCons *_args;
-    BLCons *_body;
-}
-
-// We will also later put the environment that we created this in. This is where
-// we 'close' around those.
--(id) initWithArgs:(BLCons*)args body:(BLCons*)body {
-    self = [super init];
-    
-    if (self) {
-        _args = args;
-        _body = body;
-    }
-    
-    return self;
-}
-
--(id) eval:(BLCons*)sexp withEnvironment:(BLEnvironment*)environment {
-    
-    BLCons *argsCopy = [_args copy];
-    BLCons *bodyCopy = [_body.car copy];
-    
-    while (argsCopy) {
-        id argsHead = argsCopy.car;
-        id sexpHead = sexp.car;
-        
-        argsCopy = argsCopy.cdr;
-        sexp = sexp.cdr;
-        
-        [bodyCopy replaceAtomsMatching:argsHead withReplacement:sexpHead];
-    }
-    
-    
-    return [[BLLambdaEval new] eval:bodyCopy withEnvironment:environment];
-}
-@end
-
 @implementation BLLambdaLambda
 
 +(id) symbolName {
@@ -305,12 +306,12 @@
 
 -(id) eval:(BLCons*)sexp withEnvironment:(BLEnvironment*)environment {
     
-    id label = sexp.car; // When we get symbols change this to one
+    BLSymbol *label = sexp.car; // When we get symbols change this to one
     id value = [[BLLambdaEval new] eval:[[sexp cdr] car] withEnvironment:environment];
     
-    NSAssert([label isKindOfClass:NSString.class], @"Label must be an NSString");
+    NSAssert([label isKindOfClass:BLSymbol.class], @"Label must be an BLSymbol");
     
-    [environment.symbolTable ensureSymbolForValue:value name:label];
+    [environment.symbolTable ensureSymbolForValue:value name:label.name];
         
     return value;
 }
@@ -363,25 +364,21 @@
 }
 
 -(id) evalAtom:(id)atom withEnvironment:(BLEnvironment*)environment {
-    NSAssert([atom isKindOfClass:NSString.class]
+    NSAssert([atom isKindOfClass:BLSymbol.class]
              || [atom isKindOfClass:BLLambdaClosure.class]
              || [atom isKindOfClass:NSDecimalNumber.class], 
-	     @"Atom must be an NSString, NSDecimalNumber or lambda for now.");
+	     @"Atom must be an BLSymbol, NSDecimalNumber or lambda for now.");
     
     if ([atom isKindOfClass:NSDecimalNumber.class]) {
         return atom;
-    } else if ([atom isKindOfClass:NSString.class]) {
-        id val =  [environment.symbolTable symbolForName:atom].value;
-        if (val) {
-            return val;
+    } else if ([atom isKindOfClass:BLSymbol.class]) {
+        BLSymbol *symbolFetched =  [environment.symbolTable symbolForName:[atom name]];
+        if (symbolFetched) {
+            return symbolFetched.value;
         }
     }
     
-    // This conversion here really should be going through a lisp reader of sorts
-    // Following the common lisp reader would be cool.
-    NSDecimalNumber *wasANum = [NSDecimalNumber decimalNumberWithString:atom];
-    
-    return [wasANum isEqual:[NSDecimalNumber notANumber]] ? atom : wasANum;
+    return atom;
 }
 
 @end

@@ -18,4 +18,7 @@
 -(void) addSymbol:(BLSymbol*)symbol;
 -(BLSymbol*) symbolForName:(NSString*)name;
 -(id<BLLambda>) functionForName:(NSString*)name;
+-(id<BLLambda>) functionForSymbol:(BLSymbol*)symbol;
+-(id) valueForSymbol:(BLSymbol*)symbol;
+
 @end

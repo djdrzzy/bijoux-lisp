@@ -11,133 +11,47 @@
 #import "BLCons.h"
 #import "BLEnvironment.h"
 #import "BLLambda.h"
+#import "BLReader.h"
 #import "BLSymbolTable.h"
 
-@interface NSMutableArray (BLAdditions)
--(id) nextToken;
--(id) cutFirstBalancedExpression;
-@end
-
-@implementation NSMutableArray (BLAdditions)
--(id) nextToken {
-    id firstElement = [self objectAtIndex:0];
-    [self removeObjectAtIndex:0];
-    return firstElement;
-}
--(id) cutFirstBalancedExpression {
-    NSMutableArray *tokensToReturn = [NSMutableArray array];
-    int lefties = 0;
-    int righties = 0;
-    for (NSUInteger i = 0; i < self.count; i++) {
-	id fetchedObject = [self objectAtIndex:i];
-	
-	NSAssert((i == 0 
-		  ? [fetchedObject isEqualToString:@"("] 
-		  : YES), @"Tokens to read did not start with an opening parenthesis.");
-	
-	if ([fetchedObject isEqualToString:@"("]) {
-	    lefties++;
-	} else if ([fetchedObject isEqualToString:@")"]) {
-	    righties++;
-	}
-	
-	[tokensToReturn addObject:fetchedObject];
-	
-	if (lefties == righties) {
-	    [self removeObjectsInRange:NSMakeRange(0, i + 1)];
-	    return tokensToReturn;
-	}
-    }
-    
-    return nil;
-}
+@interface BLEngine ()<BLReaderDelegate>
 @end
 
 @implementation BLEngine {
     BLEnvironment *_environment;
+    BLReader *_reader;
     
-    NSMutableArray *_storedTokens;
+    NSString *_parsingReturnValue;
 }
 
-- (id)init
-{
+- (id)init {
     self = [super init];
     if (self) {
-        _storedTokens = [NSMutableArray new];
 	_environment = [BLEnvironment new];
+	_environment.symbolTable = [BLSymbolTable new]; // <- This ain't my responsibility...
 	
-	_environment.symbolTable = [BLSymbolTable new];
+	_reader = [BLReader new];
+	_reader.delegate = self;
+	
     }
     return self;
 }
 
--(id) tokenize:(id)sexp {
-    sexp = [sexp stringByReplacingOccurrencesOfString:@"(" 
-                                           withString:@"( "];
-    
-    sexp = [sexp stringByReplacingOccurrencesOfString:@")" 
-                                           withString:@" ) "];
-    
-    NSMutableCharacterSet *characters = [[NSMutableCharacterSet alloc] init];
-    
-    [characters formUnionWithCharacterSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
-    id brokenUp = [NSMutableArray arrayWithArray:
-                   [sexp componentsSeparatedByCharactersInSet:characters]];
-    
-    [brokenUp removeObject:@""];
-    
-    return brokenUp;
-}
-
--(id) readTail:(NSMutableArray*)tokens {
-    id token = [tokens nextToken];
-    
-    if ([token isEqualToString:@")"]) {
-        return nil;
-    } else if ([token isEqualToString:@"("]) {
-        id first = [self readTail:tokens];
-        id second = [self readTail:tokens];
-        
-        return [[BLCons alloc] initWithCar:first 
-                                       cdr:second];
-    } else {
-        id first = token;
-        id second = [self readTail:tokens];
-        
-        return [[BLCons alloc] initWithCar:first 
-                                       cdr:second];
-    }
-}
-
--(id) read:(NSMutableArray*)tokens {
-    id token = [tokens nextToken];
-    
-    if ([token isEqualToString:@"("]) {
-        return [self readTail:tokens];
-    }
-    
-    return token;
-}
-
 -(id) parseAndEval:(NSString*)input {
+    _parsingReturnValue = @"";
+    
     if (!input) {
-        return @"";
+        return _parsingReturnValue;
     }
     
-    id tokenizedInput = [self tokenize:input];
+    [_reader read:input];
     
-    [_storedTokens addObjectsFromArray:tokenizedInput];
-    
-    id tokensToEval = nil;
-    id result = nil;
-    
-    while ((tokensToEval = [_storedTokens cutFirstBalancedExpression])) {
-	BLCons *formToEval = [self read:tokensToEval];
-	result = [[[BLLambdaEval alloc] init] eval:formToEval withEnvironment:_environment];
-    }
-    
-    return result;
+    return _parsingReturnValue;
+}
+
+-(void) reader:(BLReader*)reader didReadNewForm:(BLCons*)form {
+    NSString *evalResult = [[BLLambdaEval new] eval:form withEnvironment:_environment];
+    _parsingReturnValue = [evalResult description];
 }
 
 @end

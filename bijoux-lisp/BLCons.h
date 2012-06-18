@@ -13,4 +13,5 @@
 @property (strong, nonatomic) id cdr;
 -(id) initWithCar:(id)car cdr:(id)cdr;
 -(void) replaceAtomsMatching:(id)match withReplacement:(id)replacement;
+-(void) addToEnd:(id)obj;
 @end

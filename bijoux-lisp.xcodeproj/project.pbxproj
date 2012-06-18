@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		15420ABD158ED1F1008393D2 /* BLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 15420ABC158ED1F1008393D2 /* BLReader.m */; };
 		158A1AF81484A2DB009A5CA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1AF71484A2DB009A5CA4 /* UIKit.framework */; };
 		158A1AFA1484A2DB009A5CA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1AF91484A2DB009A5CA4 /* Foundation.framework */; };
 		158A1AFC1484A2DB009A5CA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 158A1AFB1484A2DB009A5CA4 /* CoreGraphics.framework */; };
@@ -53,6 +54,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		15420ABB158ED1F1008393D2 /* BLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLReader.h; sourceTree = "<group>"; };
+		15420ABC158ED1F1008393D2 /* BLReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLReader.m; sourceTree = "<group>"; };
 		158A1AF31484A2DB009A5CA4 /* bijoux-lisp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bijoux-lisp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		158A1AF71484A2DB009A5CA4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		158A1AF91484A2DB009A5CA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -145,6 +148,8 @@
 				15EA79CE158ADF8D00DA326C /* BLEnvironment.m */,
 				15D782E6157D6D1500E204BC /* BLLambda.h */,
 				15D782E7157D6D1500E204BC /* BLLambda.m */,
+				15420ABB158ED1F1008393D2 /* BLReader.h */,
+				15420ABC158ED1F1008393D2 /* BLReader.m */,
 				15BF851B1589A271008EE49E /* BLSymbol.h */,
 				15BF851C1589A271008EE49E /* BLSymbol.m */,
 				15BF851815885352008EE49E /* BLSymbolTable.h */,
@@ -293,6 +298,7 @@
 				15BF851A15885352008EE49E /* BLSymbolTable.m in Sources */,
 				15BF851D1589A271008EE49E /* BLSymbol.m in Sources */,
 				15EA79CF158ADF8D00DA326C /* BLEnvironment.m in Sources */,
+				15420ABD158ED1F1008393D2 /* BLReader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

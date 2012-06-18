@@ -109,6 +109,10 @@
 }
 @end
 
+
+// Reimplement this onces we get our reader either knowing what nil is or we
+// get our list function
+// http://www.lispworks.com/documentation/lw60/CLHS/Body/f_funcal.htm#funcall
 @implementation BLLambdaFuncall
 
 +(id) symbolName {
@@ -153,6 +157,8 @@
     if ([fetchedLambda isKindOfClass:BLLambdaEval.class]) {
         return [self eval:[resultToEval car] withEnvironment:environment];
     }
+    
+
     
     // I should apply this at this point...?
     return [fetchedLambda eval:resultToEval withEnvironment:environment];

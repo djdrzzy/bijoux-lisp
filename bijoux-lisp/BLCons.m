@@ -48,6 +48,14 @@
     }
 }
 
+-(void) addToEnd:(id)obj {
+    if (self.cdr) {
+	[self.cdr addToEnd:obj];
+    } else {
+	self.cdr = obj;
+    }
+}
+
 -(NSString*) descriptionWithOpeningParenthesis:(BOOL)openingPar {
     NSString *openingParString = openingPar ? @"(%@" : @"%@";
     

@@ -129,7 +129,7 @@
     
     id<BLLambda> fetchedLambda = ([key conformsToProtocol:@protocol(BLLambda)] 
 				  ? key 
-				  : [environment.symbolTable symbolForName:key].value);
+				  : [environment.symbolTable functionForSymbol:key]);
     
     NSAssert(fetchedLambda, @"Unable to evaluate the form: %@", cons);
     

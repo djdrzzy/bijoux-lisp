@@ -61,7 +61,9 @@
 -(NSString*) descriptionWithOpeningParenthesis:(BOOL)openingPar {
     NSString *openingParString = openingPar ? @"(%@" : @"%@";
     
-    openingParString = self.cdr ? [openingParString stringByAppendingString:@" "] : [openingParString stringByAppendingString:@""];
+    openingParString = (self.cdr 
+			? [openingParString stringByAppendingString:@" "] 
+			: [openingParString stringByAppendingString:@""]);
     
     NSString *aCar = [NSString stringWithFormat:openingParString, self.car] ;
     

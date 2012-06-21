@@ -30,8 +30,8 @@
 	id fetchedObject = [self objectAtIndex:i];
 	
 	NSAssert((i == 0 
-		  ? [fetchedObject isEqualToString:@"("] 
-		  : YES), @"Tokens to read did not start with an opening parenthesis.");
+		  ? [fetchedObject isEqualToString:@"("] || [fetchedObject isEqualToString:@"'"]
+		  : YES), @"Tokens to read did not start with an opening parenthesis or \"'\".");
 	
 	if ([fetchedObject isEqualToString:@"("]) {
 	    lefties++;
@@ -41,7 +41,7 @@
 	
 	[tokensToReturn addObject:fetchedObject];
 	
-	if (lefties == righties) {
+	if (lefties == righties && lefties != 0 && righties != 0) {
 	    [self removeObjectsInRange:NSMakeRange(0, i + 1)];
 	    return tokensToReturn;
 	}
@@ -66,7 +66,10 @@
 
 -(id) tokenize:(id)sexp {
     sexp = [sexp stringByReplacingOccurrencesOfString:@"(" 
-                                           withString:@"( "];
+                                           withString:@" ( "];
+    
+    sexp = [sexp stringByReplacingOccurrencesOfString:@"'" 
+                                           withString:@" ' "];
     
     sexp = [sexp stringByReplacingOccurrencesOfString:@")" 
                                            withString:@" ) "];
@@ -74,7 +77,6 @@
     NSMutableCharacterSet *characters = [[NSMutableCharacterSet alloc] init];
     
     [characters formUnionWithCharacterSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    //[characters addCharactersInString:@"\""]; TODO: Parse strings
     
     id brokenUp = [NSMutableArray arrayWithArray:
                    [sexp componentsSeparatedByCharactersInSet:characters]];
@@ -95,6 +97,13 @@
         
         return [[BLCons alloc] initWithCar:first 
                                        cdr:second];
+    } else if ([token isEqualToString:@"'"]) {
+	// Not working so far...
+	//id first = ;
+	id second = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
+					     cdr:[self readTail:tokens]];
+	return [[BLCons alloc] initWithCar:second
+				       cdr:nil];
     } else {
 	id first = nil;
 	
@@ -129,6 +138,12 @@
     
     if ([token isEqualToString:@"("]) {
         return [self readTail:tokens];
+    } else if ([token isEqualToString:@"'"]) {
+	id first = [[BLSymbol alloc] initWithName:@"quote"];
+	id second = [[BLCons alloc] initWithCar:[self nextForm:tokens]
+					    cdr:nil];
+	return [[BLCons alloc] initWithCar:first
+				       cdr:second]; 
     }
     
     return token;

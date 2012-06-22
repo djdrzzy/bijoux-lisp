@@ -23,27 +23,51 @@
     return firstElement;
 }
 -(id) cutFirstBalancedExpression {
-    NSMutableArray *tokensToReturn = [NSMutableArray array];
-    int lefties = 0;
-    int righties = 0;
-    for (NSUInteger i = 0; i < self.count; i++) {
-	id fetchedObject = [self objectAtIndex:i];
+    // If we start with a "(" we proceed as normal...
+    // If we start with a "'" we go a different path... Just checking for the next token and returning those two to eval.
+    if (self.count > 0) {
+	id firstToken = [self objectAtIndex:0];
 	
-	NSAssert((i == 0 
-		  ? [fetchedObject isEqualToString:@"("] || [fetchedObject isEqualToString:@"'"]
-		  : YES), @"Tokens to read did not start with an opening parenthesis or \"'\".");
-	
-	if ([fetchedObject isEqualToString:@"("]) {
-	    lefties++;
-	} else if ([fetchedObject isEqualToString:@")"]) {
-	    righties++;
-	}
-	
-	[tokensToReturn addObject:fetchedObject];
-	
-	if (lefties == righties && lefties != 0 && righties != 0) {
-	    [self removeObjectsInRange:NSMakeRange(0, i + 1)];
-	    return tokensToReturn;
+	if ([firstToken isEqualToString:@"("]) {
+	    NSMutableArray *tokensToReturn = [NSMutableArray array];
+	    int lefties = 0;
+	    int righties = 0;
+	    for (NSUInteger i = 0; i < self.count; i++) {
+		id fetchedObject = [self objectAtIndex:i];
+		
+		NSAssert((i == 0 
+			  ? [fetchedObject isEqualToString:@"("]
+			  : YES), @"Tokens to read did not start with an opening parenthesis.");
+		
+		
+		if ([fetchedObject isEqualToString:@"("]) {
+		    lefties++;
+		} else if ([fetchedObject isEqualToString:@")"]) {
+		    righties++;
+		}
+		
+		[tokensToReturn addObject:fetchedObject];
+		
+		if (lefties == righties && lefties != 0 && righties != 0) {
+		    [self removeObjectsInRange:NSMakeRange(0, i + 1)];
+		    return tokensToReturn;
+		}
+	    }
+	} else if ([firstToken isEqualToString:@"'"]) {
+	    NSMutableArray *tokensToReturn = [NSMutableArray arrayWithObject:firstToken];
+	    
+	    id secondtoken = [self objectAtIndex:1];
+	    if ([secondtoken isEqualToString:@"("]) {
+		[self removeObjectsInRange:NSMakeRange(0, 1)];
+		[tokensToReturn addObjectsFromArray:[self cutFirstBalancedExpression]];
+		return tokensToReturn;
+	    } else {
+		[tokensToReturn addObject:[self objectAtIndex:1]];
+		[self removeObjectsInRange:NSMakeRange(0, 1)];
+		return tokensToReturn;
+	    }
+	    
+	    //[tokensToReturn addObjectsFromArray:[tokensToReturn 
 	}
     }
     
@@ -100,10 +124,28 @@
     } else if ([token isEqualToString:@"'"]) {
 	// Not working so far...
 	//id first = ;
-	id second = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
-					     cdr:[self readTail:tokens]];
-	return [[BLCons alloc] initWithCar:second
-				       cdr:nil];
+	
+	id nextToken = [tokens objectAtIndex:0];
+	
+	id first = nil;
+	if ([nextToken isEqualToString:@"("]) {
+	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
+					    cdr:[self readTail:tokens]];
+	    return [[BLCons alloc] initWithCar:first
+					   cdr:nil];
+	} else {
+	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
+					    cdr:[[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:nextToken]
+									cdr:nil]];
+	    [tokens removeObjectsInRange:NSMakeRange(0, 1)];
+	    return [[BLCons alloc] initWithCar:first
+					   cdr:[self readTail:tokens]];
+	}
+	
+//	
+//	
+//	return [[BLCons alloc] initWithCar:first
+//				       cdr:nil];
     } else {
 	id first = nil;
 	

@@ -63,7 +63,7 @@
 		return tokensToReturn;
 	    } else {
 		[tokensToReturn addObject:[self objectAtIndex:1]];
-		[self removeObjectsInRange:NSMakeRange(0, 1)];
+		[self removeObjectsInRange:NSMakeRange(0, 2)];
 		return tokensToReturn;
 	    }
 	    
@@ -141,11 +141,6 @@
 	    return [[BLCons alloc] initWithCar:first
 					   cdr:[self readTail:tokens]];
 	}
-	
-//	
-//	
-//	return [[BLCons alloc] initWithCar:first
-//				       cdr:nil];
     } else {
 	id first = nil;
 	

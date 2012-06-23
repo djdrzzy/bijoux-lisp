@@ -120,53 +120,12 @@
         return [[BLCons alloc] initWithCar:first 
                                        cdr:second];
     } else if ([token isEqualToString:@"'"]) {
-	// Not working so far...
-	//id first = ;
+	id readTokens = [self readTail:tokens];
 	
-	//id nextToken = [tokens objectAtIndex:0];
-	
-	id tail = [self readTail:tokens];
-	id head = [tail car];
-	id rest = [tail cdr];
-	
-	id first = nil;
-	if ([head isKindOfClass:BLCons.class]) {
-	    //id tail = [self readTail:tokens];
-	    
-	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
-					    cdr:[[BLCons alloc] initWithCar:head
-									cdr:nil]];
-	    
-	    return [[BLCons alloc] initWithCar:first
-					   cdr:rest];
-	} else {
-	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
-					    cdr:[[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:head]
-									cdr:nil]];
-	    [tokens removeObjectsInRange:NSMakeRange(0, 1)];
-	    return [[BLCons alloc] initWithCar:first
-					   cdr:rest];
-	}
-	
-//	id first = nil;
-//	if ([nextToken isEqualToString:@"("]) {
-//	    
-//	    id tail = [self readTail:tokens];
-//	    
-//	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
-//					    cdr:[[BLCons alloc] initWithCar:[tail car]
-//									cdr:nil]];
-//	    	    
-//	    return [[BLCons alloc] initWithCar:first
-//					   cdr:[tail cdr]];
-//	} else {
-//	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
-//					    cdr:[[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:nextToken]
-//									cdr:nil]];
-//	    [tokens removeObjectsInRange:NSMakeRange(0, 1)];
-//	    return [[BLCons alloc] initWithCar:first
-//					   cdr:[self readTail:tokens]];
-//	}
+	return [[BLCons alloc] initWithCar:[[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
+								   cdr:[[BLCons alloc] initWithCar:[readTokens car]
+											       cdr:nil]]
+				       cdr:[readTokens cdr]];
     } else {
 	id first = nil;
 	
@@ -174,7 +133,7 @@
 	
 	NSCharacterSet *numSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789."];
 	BOOL validNum = [[token stringByTrimmingCharactersInSet:numSet] isEqualToString:@""];
-
+	
 	if (validNum) {
 	    first = [[NSDecimalNumber alloc] initWithString:token];
 	} else {
@@ -188,7 +147,7 @@
 	// TODO maybe... Treat numbers more like this: http://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node189.html
 	// Right now it is if it can be treated as an NSDecimalNumber
 	
-
+	
         id second = [self readTail:tokens];
         
         return [[BLCons alloc] initWithCar:first 

@@ -18,9 +18,15 @@
 
 @implementation NSMutableArray (BLAdditions)
 -(id) nextToken {
-    id firstElement = [self objectAtIndex:0];
-    [self removeObjectAtIndex:0];
-    return firstElement;
+    if (self.count > 0) {
+	id firstElement = [self objectAtIndex:0];
+	[self removeObjectAtIndex:0];
+	return firstElement;
+    } else {
+	return nil;
+    }
+    
+    
 }
 -(id) cutFirstBalancedExpression {
     // If we start with a "(" we proceed as normal...
@@ -66,6 +72,9 @@
 		[self removeObjectsInRange:NSMakeRange(0, 2)];
 		return tokensToReturn;
 	    }	    
+	} else {
+	    [self removeObjectsInRange:NSMakeRange(0, 1)];
+	    return [NSMutableArray arrayWithObject:firstToken];
 	}
     }
     
@@ -109,12 +118,18 @@
 }
 
 -(id) readTail:(NSMutableArray*)tokens {
+    
     id token = [tokens nextToken];
+    
+    if (!token) {
+	return nil;
+    }
     
     if ([token isEqualToString:@")"]) {
         return nil;
     } else if ([token isEqualToString:@"("]) {
         id first = [self readTail:tokens];
+	
         id second = [self readTail:tokens];
         
         return [[BLCons alloc] initWithCar:first 
@@ -155,22 +170,6 @@
     }
 }
 
--(id) nextForm:(NSMutableArray*)tokens {
-    id token = [tokens nextToken];
-    
-    if ([token isEqualToString:@"("]) {
-        return [self readTail:tokens];
-    } else if ([token isEqualToString:@"'"]) {
-	id first = [[BLSymbol alloc] initWithName:@"quote"];
-	id second = [[BLCons alloc] initWithCar:[self nextForm:tokens]
-					    cdr:nil];
-	return [[BLCons alloc] initWithCar:first
-				       cdr:second]; 
-    }
-    
-    return token;
-}
-
 -(void) read:(id)input {
     id tokenizedInput = [self tokenize:input];
     
@@ -179,7 +178,7 @@
     id tokensToEval = nil;
     
     while ((tokensToEval = [_storedTokens cutFirstBalancedExpression])) {
-	BLCons *formToEval = [self nextForm:tokensToEval];
+	BLCons *formToEval = [[self readTail:tokensToEval] car];
 	if ([_delegate respondsToSelector:@selector(reader:didReadNewForm:)]) {
 	    [_delegate reader:self didReadNewForm:formToEval];
 	}

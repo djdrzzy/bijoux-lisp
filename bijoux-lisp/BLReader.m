@@ -59,7 +59,7 @@
 		    return tokensToReturn;
 		}
 	    }
-	} else if ([firstToken isEqualToString:@"'"]) {
+	} else if ([firstToken isEqualToString:@"'"]) { // TODO: If this token is in our reader macro dictionary then do this... Doesn't have to just be the quote symbol
 	    NSMutableArray *tokensToReturn = [NSMutableArray arrayWithObject:firstToken];
 	    
 	    id secondtoken = [self objectAtIndex:1];
@@ -137,6 +137,7 @@
     } else if ([token isEqualToString:@"'"]) {
 	id readTokens = [self readTail:tokens];
 	
+	// TODO: This is a general case that we can do. token can be the key and the name of the symbol can be the value
 	return [[BLCons alloc] initWithCar:[[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
 								   cdr:[[BLCons alloc] initWithCar:[readTokens car]
 											       cdr:nil]]

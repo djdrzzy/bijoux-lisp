@@ -364,15 +364,8 @@
 }
 
 -(id) evalAtom:(id)atom withEnvironment:(BLEnvironment*)environment {
-    NSAssert([atom isKindOfClass:BLSymbol.class]
-             || [atom isKindOfClass:BLLambdaClosure.class]
-             || [atom isKindOfClass:NSDecimalNumber.class], 
-	     @"Atom must be an BLSymbol, NSDecimalNumber or lambda for now.");
-    
-    if ([atom isKindOfClass:NSDecimalNumber.class]) {
-        return atom;
-    } else if ([atom isKindOfClass:BLSymbol.class]) {
-        BLSymbol *symbolFetched =  [environment.symbolTable symbolForName:[atom name]];
+    if ([atom isKindOfClass:BLSymbol.class]) {
+	BLSymbol *symbolFetched =  [environment.symbolTable symbolForName:[atom name]];
         if (symbolFetched) {
             return symbolFetched.value;
         }

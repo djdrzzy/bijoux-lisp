@@ -129,10 +129,17 @@
 	
 	id first = nil;
 	if ([nextToken isEqualToString:@"("]) {
+	    
+	    id tail = [self readTail:tokens];
+	    
 	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
-					    cdr:[self readTail:tokens]];
+					    cdr:[[BLCons alloc] initWithCar:[tail car]
+									cdr:nil]];
+	    
+//	    return first;
+	    
 	    return [[BLCons alloc] initWithCar:first
-					   cdr:nil];
+					   cdr:[tail cdr]];
 	} else {
 	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
 					    cdr:[[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:nextToken]

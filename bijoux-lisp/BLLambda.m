@@ -255,7 +255,7 @@
 @implementation BLLambdaEqual
 
 +(id) symbolName {
-    return @"eq?";
+    return @"eq";
 }
 
 -(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {

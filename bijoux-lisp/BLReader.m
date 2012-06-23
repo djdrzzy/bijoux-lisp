@@ -65,9 +65,7 @@
 		[tokensToReturn addObject:[self objectAtIndex:1]];
 		[self removeObjectsInRange:NSMakeRange(0, 2)];
 		return tokensToReturn;
-	    }
-	    
-	    //[tokensToReturn addObjectsFromArray:[tokensToReturn 
+	    }	    
 	}
     }
     
@@ -125,29 +123,50 @@
 	// Not working so far...
 	//id first = ;
 	
-	id nextToken = [tokens objectAtIndex:0];
+	//id nextToken = [tokens objectAtIndex:0];
+	
+	id tail = [self readTail:tokens];
+	id head = [tail car];
+	id rest = [tail cdr];
 	
 	id first = nil;
-	if ([nextToken isEqualToString:@"("]) {
-	    
-	    id tail = [self readTail:tokens];
+	if ([head isKindOfClass:BLCons.class]) {
+	    //id tail = [self readTail:tokens];
 	    
 	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
-					    cdr:[[BLCons alloc] initWithCar:[tail car]
+					    cdr:[[BLCons alloc] initWithCar:head
 									cdr:nil]];
 	    
-//	    return first;
-	    
 	    return [[BLCons alloc] initWithCar:first
-					   cdr:[tail cdr]];
+					   cdr:rest];
 	} else {
 	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
-					    cdr:[[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:nextToken]
+					    cdr:[[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:head]
 									cdr:nil]];
 	    [tokens removeObjectsInRange:NSMakeRange(0, 1)];
 	    return [[BLCons alloc] initWithCar:first
-					   cdr:[self readTail:tokens]];
+					   cdr:rest];
 	}
+	
+//	id first = nil;
+//	if ([nextToken isEqualToString:@"("]) {
+//	    
+//	    id tail = [self readTail:tokens];
+//	    
+//	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
+//					    cdr:[[BLCons alloc] initWithCar:[tail car]
+//									cdr:nil]];
+//	    	    
+//	    return [[BLCons alloc] initWithCar:first
+//					   cdr:[tail cdr]];
+//	} else {
+//	    first = [[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:@"quote"]
+//					    cdr:[[BLCons alloc] initWithCar:[[BLSymbol alloc] initWithName:nextToken]
+//									cdr:nil]];
+//	    [tokens removeObjectsInRange:NSMakeRange(0, 1)];
+//	    return [[BLCons alloc] initWithCar:first
+//					   cdr:[self readTail:tokens]];
+//	}
     } else {
 	id first = nil;
 	

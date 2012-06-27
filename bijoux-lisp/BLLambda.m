@@ -37,19 +37,19 @@
 
 -(id) eval:(BLCons*)sexp withEnvironment:(BLEnvironment*)environment {
     
+    BLCons *sexpCopy = [sexp copy];
     BLCons *argsCopy = [_args copy];
     BLCons *bodyCopy = [_body.car copy];
     
     while (argsCopy) {
         id argsHead = argsCopy.car;
-        id sexpHead = sexp.car;
+        id sexpHead = sexpCopy.car;
         
         argsCopy = argsCopy.cdr;
-        sexp = sexp.cdr;
+        sexpCopy = sexpCopy.cdr;
         
         [bodyCopy replaceSymbolsMatching:argsHead withReplacement:sexpHead];
     }
-    
     
     return [[BLLambdaEval new] eval:bodyCopy withEnvironment:environment];
 }
@@ -176,6 +176,7 @@
 }
 
 -(id) eval:(BLCons*)cons withEnvironment:(BLEnvironment*)environment {
+    
     id key = ([cons.car isKindOfClass:BLCons.class] 
 	      ? [self eval:cons.car withEnvironment:environment] 
 	      : cons.car);
@@ -188,7 +189,7 @@
     
     NSSet *setToNotEvalArgs = [NSSet setWithObjects:
 			       [BLLambdaQuote symbolName], 
-			       [BLLambdaLambda symbolName], 
+			       [BLLambdaLambda symbolName],
 			       [BLLambdaLabel symbolName], 
 			       [BLLambdaCond symbolName], 
 			       nil];
@@ -196,7 +197,7 @@
     id resultToEval = ([fetchedLambda isKindOfClass:BLLambdaClosure.class] || [setToNotEvalArgs containsObject:[cons.car name]] 
 		       ? cons.cdr 
 		       : [self evalArgs:cons.cdr withEnvironment:environment]);
-    
+
     if ([fetchedLambda isKindOfClass:BLLambdaEval.class]) {
         return [self eval:[resultToEval car] withEnvironment:environment];
     }
@@ -352,11 +353,7 @@
     return @"eval";
 }
 
--(id) eval:(id)sexp withEnvironment:(BLEnvironment*)environment {
-    if (!sexp) {
-        return nil;
-    }
-    
+-(id) eval:(id)sexp withEnvironment:(BLEnvironment*)environment {    
     return ([sexp isKindOfClass:BLCons.class]
             ? [[BLLambdaFuncall new] eval:sexp withEnvironment:environment]
             : [self evalAtom:sexp withEnvironment:environment]);
